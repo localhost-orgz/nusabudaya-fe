@@ -10,9 +10,12 @@ import Cloud from "./Cloud";
 import { PROVINCE_MARKERS } from "@/constants/MarkerPositions";
 import AnimatedText from "../AnimatedText";
 import SearchProvince from "./SearchProvince";
+import DetailProvince from "./DetailProvince";
+import { getProvinceByName } from "@/constants/listDetail";
 
 const MapComponent = () => {
   const [activeProv, setActiveProv] = useState(null);
+  const [selectedProvince, setSelectedProvince] = useState(null);
   const mapRef = useRef(null);
 
   const defaultIcon = L.icon({
@@ -64,6 +67,15 @@ const MapComponent = () => {
 
       const feature = indonesianData.features[originalIndex];
       setActiveProv(feature);
+
+      const provinceData = PROVINCE_MARKERS.find(
+        (p) => p.originalIndex === originalIndex
+      );
+
+      if (provinceData) {
+        const DetailData = getProvinceByName(provinceData.name);
+        setSelectedProvince(DetailData);
+      }
     }
   };
 
@@ -126,6 +138,8 @@ const MapComponent = () => {
       </MapContainer>
       <Cloud />
       <SearchProvince onProvinceSelect={handleSearchSelect} />
+
+      {selectedProvince && <DetailProvince province={selectedProvince} />}
     </main>
   );
 };

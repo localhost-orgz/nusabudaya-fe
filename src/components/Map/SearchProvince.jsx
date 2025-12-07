@@ -48,7 +48,7 @@ const SearchProvince = ({ onProvinceSelect }) => {
           strokeWidth={1.5}
           className="w-5 h-5 absolute stroke-gray-400 top-1/2 -translate-y-1/2 left-2"
         />
-        {query && (
+        {isOpen && (
           <button
             onClick={() => {
               setQuery("");
