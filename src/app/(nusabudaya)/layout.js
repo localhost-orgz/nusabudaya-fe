@@ -8,8 +8,8 @@ const MainLayout = ({ children }) => {
         <Sidebar />
       </div>
 
-      <main className="md:pl-64 md:pb-0 pb-18 h-full">
-        <div className="h-full w-full">{children}</div>
+      <main className="md:pl-64 h-screen md:h-screen overflow-hidden">
+        <div className="h-full w-full pb-[72px] md:pb-0">{children}</div>
       </main>
     </>
   );

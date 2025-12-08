@@ -7,21 +7,35 @@
   --color-secondary: #c8a668;
 }
 
+/* Base styles */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overscroll-behavior: none;
+  touch-action: pan-x pan-y;
+}
+
 .serif {
   font-family: "Libre Bodoni", serif;
 }
 
+/* Panel pattern background */
 .panel::before {
   content: "";
   position: absolute;
-  inset: 0; /* Shortcut untuk top:0, right:0, bottom:0, left:0 */
-  z-index: -1; /* Taruh di belakang konten */
-
-  /* --- Masukin Pattern Kamu di Sini --- */
+  inset: 0;
+  z-index: -1;
   --s: 30px;
   --c1: #0d1922;
   --c2: #c7c7c7;
-
   --_g: var(--c1) 0 100%, #0000 102%;
   background: conic-gradient(#0000 75%, var(--_g)) calc(var(--s) / 4)
       calc(var(--s) / 4),
@@ -30,16 +44,47 @@
     radial-gradient(65% 65% at 50% 150%, var(--_g)),
     radial-gradient(65% 65% at 150% 50%, var(--_g)) var(--c2);
   background-size: var(--s) var(--s);
-
-  /* --- Atur Opacity di Sini --- */
-  opacity: 0.006; /* 50% Transparan */
+  opacity: 0.006;
 }
 
-.drop-provinces::-webkit-scrollbar {
-  display: none;
+/* Custom scrollbar */
+.drop-provinces::-webkit-scrollbar,
+.panel::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-/* Animasi Awan */
+.drop-provinces::-webkit-scrollbar-track,
+.panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.drop-provinces::-webkit-scrollbar-thumb,
+.panel::-webkit-scrollbar-thumb {
+  background: var(--color-secondary);
+  border-radius: 10px;
+}
+
+.drop-provinces::-webkit-scrollbar-thumb:hover,
+.panel::-webkit-scrollbar-thumb:hover {
+  background: #d4b87a;
+}
+
+/* Mobile: Hide scrollbar but keep functionality */
+@media (max-width: 768px) {
+  .drop-provinces::-webkit-scrollbar,
+  .panel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .drop-provinces,
+  .panel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Cloud animation */
 .clouds-layer {
   position: absolute;
   inset: 0;
@@ -50,9 +95,9 @@
   z-index: 99;
   mix-blend-mode: screen;
   animation: moveCloudsDiag 60s linear infinite;
+  pointer-events: none;
 }
 
-/* Gerak diagonal: kanan + bawah */
 @keyframes moveCloudsDiag {
   0% {
     background-position: 0 0;
@@ -62,21 +107,24 @@
   }
 }
 
-/* Animasi GEOJSON */
+/* GeoJSON fade animation */
 .geo-fade-in {
   animation: fadeIn 0.4s ease-out;
   transform-origin: center;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
+    transform: scale(0.95);
   }
   to {
     opacity: 1;
+    transform: scale(1);
   }
 }
 
-/* 🔎 Target class unik yang kita buat tadi */
+/* Custom Leaflet popup styles */
 .my-custom-popup .leaflet-popup-content-wrapper {
   background: color-mix(in srgb, var(--color-primary) 70%, transparent);
   color: white;
@@ -92,14 +140,21 @@
   border: 1px solid var(--color-secondary);
 }
 
-/* 🔎 Atur margin/spacing konten di dalem */
 .my-custom-popup .leaflet-popup-content {
   margin: 8px 12px;
   line-height: 1.4;
+  font-size: 13px;
 }
-/* Add this to your globals.css file */
 
-/* Neon glow effect for GeoJSON borders */
+/* Mobile: Smaller popup */
+@media (max-width: 768px) {
+  .my-custom-popup .leaflet-popup-content {
+    margin: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Neon glow effects for province borders */
 .neon-province {
   filter: drop-shadow(0 0 8px #8a07fe) drop-shadow(0 0 15px #8a07fe)
     drop-shadow(0 0 25px #8a07fe);
@@ -107,7 +162,6 @@
   stroke-width: 3 !important;
 }
 
-/* Alternative: Cyan neon effect */
 .neon-province-cyan {
   filter: drop-shadow(0 0 8px #00ffff) drop-shadow(0 0 15px #00ffff)
     drop-shadow(0 0 25px #00ffff);
@@ -115,7 +169,6 @@
   stroke-width: 3 !important;
 }
 
-/* Alternative: Electric blue neon */
 .neon-province-blue {
   filter: drop-shadow(0 0 8px #0088ff) drop-shadow(0 0 15px #0088ff)
     drop-shadow(0 0 25px #0088ff);
@@ -123,7 +176,6 @@
   stroke-width: 3 !important;
 }
 
-/* Alternative: Bright green neon */
 .neon-province-green {
   filter: drop-shadow(0 0 8px #00ff00) drop-shadow(0 0 15px #00ff00)
     drop-shadow(0 0 25px #00ff00);
@@ -131,7 +183,6 @@
   stroke-width: 3 !important;
 }
 
-/* Alternative: Yellowish neon */
 .neon-province-yellow {
   filter: drop-shadow(0 0 8px #ffff00) drop-shadow(0 0 15px #ffff00)
     drop-shadow(0 0 25px #ffff00);
@@ -139,10 +190,93 @@
   stroke-width: 3 !important;
 }
 
-/* Alternative: Orange neon */
 .neon-province-orange {
   filter: drop-shadow(0 0 8px #ff8800) drop-shadow(0 0 15px #ff8800)
     drop-shadow(0 0 25px #ff8800);
   stroke: #ff8800 !important;
   stroke-width: 3 !important;
+}
+
+/* Mobile: Reduce neon intensity for performance */
+@media (max-width: 768px) {
+  .neon-province,
+  .neon-province-cyan,
+  .neon-province-blue,
+  .neon-province-green,
+  .neon-province-yellow,
+  .neon-province-orange {
+    stroke-width: 2 !important;
+  }
+
+  .neon-province {
+    filter: drop-shadow(0 0 5px #8a07fe) drop-shadow(0 0 10px #8a07fe);
+  }
+
+  .neon-province-cyan {
+    filter: drop-shadow(0 0 5px #00ffff) drop-shadow(0 0 10px #00ffff);
+  }
+
+  .neon-province-blue {
+    filter: drop-shadow(0 0 5px #0088ff) drop-shadow(0 0 10px #0088ff);
+  }
+
+  .neon-province-green {
+    filter: drop-shadow(0 0 5px #00ff00) drop-shadow(0 0 10px #00ff00);
+  }
+
+  .neon-province-yellow {
+    filter: drop-shadow(0 0 5px #ffff00) drop-shadow(0 0 10px #ffff00);
+  }
+
+  .neon-province-orange {
+    filter: drop-shadow(0 0 5px #ff8800) drop-shadow(0 0 10px #ff8800);
+  }
+}
+
+/* Safe area padding for notched devices */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top);
+  }
+}
+
+/* Prevent iOS zoom on input focus */
+@media (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth transitions for interactive elements */
+button,
+a,
+.cursor-pointer {
+  transition: transform 0.15s ease-out, opacity 0.15s ease-out;
+}
+
+button:active,
+a:active,
+.cursor-pointer:active {
+  transform: scale(0.97);
+}
+
+/* Loading animation */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }

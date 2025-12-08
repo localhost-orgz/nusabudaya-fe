@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import indonesianData from "../../../public/id.json";
 import { GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
@@ -17,8 +17,23 @@ import AudioController from "./AudioController";
 const MapComponent = () => {
   const [activeProv, setActiveProv] = useState(null);
   const [selectedProvince, setSelectedProvince] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [lastTap, setLastTap] = useState(0);
   const mapRef = useRef(null);
   const audioRefsRef = useRef(null);
+  const markerRefs = useRef({});
+
+  // Detect if device is mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const defaultIcon = L.icon({
     iconUrl: "/sumatera.webp",
@@ -28,13 +43,11 @@ const MapComponent = () => {
     className: "rounded-full",
   });
 
-  // boundary indonesia
   const bounds = [
     [-13.92, 90.01],
     [9.91, 145.97],
   ];
 
-  // [Styling GeoJSON with NEON effect] - now using hardcoded colors
   const getGeoJsonStyle = (originalIndex) => {
     const province = PROVINCE_MARKERS.find(
       (p) => p.originalIndex === originalIndex
@@ -70,11 +83,11 @@ const MapComponent = () => {
     }
   };
 
-  // Flyto province yang dipilih
+  // Desktop: Click to fly and show detail
+  // Mobile: Double-click to fly and show detail
   const handleMarkerClick = (position, originalIndex) => {
     if (mapRef.current) {
       playSound("zoom");
-      // Fly to posisi marker
       mapRef.current.flyTo(position, 7, {
         duration: 1.5,
         easeLinearity: 0.25,
@@ -87,14 +100,38 @@ const MapComponent = () => {
         (p) => p.originalIndex === originalIndex
       );
 
-      // Cari baris ini di handleMarkerClick
       if (provinceData) {
-        // ✅ Benerin jadi object
         const DetailData = getProvinceByName({ name: provinceData.name });
         setSelectedProvince(DetailData);
       }
     }
   };
+
+  // Mobile: Single click shows GeoJSON + sound
+  const handleMobileTap = (position, originalIndex, markerElement) => {
+    const currentTime = new Date().getTime();
+    const tapLength = currentTime - lastTap;
+
+    // Double tap detection (within 300ms)
+    if (tapLength < 300 && tapLength > 0) {
+      // Double tap: Same behavior as desktop click
+      handleMarkerClick(position, originalIndex);
+      setLastTap(0); // Reset
+    } else {
+      // Single tap: Just show GeoJSON and play sound
+      playSound("hover");
+      const feature = indonesianData.features[originalIndex];
+      setActiveProv(feature);
+
+      // Open popup on single tap
+      if (markerElement) {
+        markerElement.openPopup();
+      }
+
+      setLastTap(currentTime);
+    }
+  };
+
   const handleClosePanel = () => {
     setSelectedProvince(null);
   };
@@ -103,22 +140,42 @@ const MapComponent = () => {
     audioRefsRef.current = refs;
   };
 
+  // Desktop hover handlers
+  const handleMouseOver = (e, originalIndex) => {
+    if (isMobile) return; // Skip on mobile
+
+    playSound("hover");
+    const feature = indonesianData.features[originalIndex];
+    setActiveProv(feature);
+    e.target.openPopup();
+  };
+
+  const handleMouseOut = (e) => {
+    if (isMobile) return; // Skip on mobile
+
+    setActiveProv(null);
+    e.target.closePopup();
+  };
+
   return (
     <main className="md:h-screen h-[calc(100vh-72px)] w-full relative">
       <MapContainer
-        center={[-3.2889889859501693, 118.94523262448598]} // koordinat awal
-        zoom={6} // level zoom awal
-        minZoom={5.5} // batas untuk zoom out
+        center={[-3.2889889859501693, 118.94523262448598]}
+        zoom={6}
+        minZoom={5.5}
         maxZoom={9}
-        className="w-full h-full" // class map
+        className="w-full h-full"
         maxBounds={bounds}
         maxBoundsViscosity={11}
         zoomSnap={0.5}
         wheelPxPerZoomLevel={500}
         ref={mapRef}
         zoomControl={false}
+        tap={isMobile} // Enable tap on mobile
+        tapTolerance={15} // Increase tap tolerance for mobile
       >
         <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
+
         {activeProv && (
           <GeoJSON
             key={activeProv.properties.id || Math.random()}
@@ -130,6 +187,7 @@ const MapComponent = () => {
             )}
           />
         )}
+
         {PROVINCE_MARKERS.map((prov) => {
           const isActive =
             activeProv === indonesianData.features[prov.originalIndex];
@@ -139,28 +197,43 @@ const MapComponent = () => {
               key={prov.originalIndex}
               position={prov.position}
               icon={defaultIcon}
+              ref={(ref) => {
+                if (ref) {
+                  markerRefs.current[prov.originalIndex] = ref;
+                }
+              }}
               eventHandlers={{
-                click: () =>
-                  handleMarkerClick(prov.position, prov.originalIndex),
-                mouseover: (e) => {
-                  playSound("hover");
-                  const feature = indonesianData.features[prov.originalIndex];
-                  setActiveProv(feature);
-                  e.target.openPopup();
+                // Desktop: click to fly and show detail
+                click: (e) => {
+                  if (!isMobile) {
+                    handleMarkerClick(prov.position, prov.originalIndex);
+                  } else {
+                    // Mobile: handle tap (single or double)
+                    handleMobileTap(
+                      prov.position,
+                      prov.originalIndex,
+                      e.target
+                    );
+                  }
                 },
-                mouseout: (e) => {
-                  setActiveProv(null);
-                  e.target.closePopup();
-                },
+                // Desktop only: hover to show GeoJSON
+                mouseover: (e) => handleMouseOver(e, prov.originalIndex),
+                mouseout: handleMouseOut,
               }}
             >
-              <Popup className="my-custom-popup" closeButton={false}>
+              <Popup
+                className="my-custom-popup"
+                closeButton={false}
+                autoClose={isMobile} // Auto close on mobile
+                closeOnClick={isMobile}
+              >
                 {isActive && <AnimatedText text={prov.name} />}
               </Popup>
             </Marker>
           );
         })}
       </MapContainer>
+
       <Cloud />
       <SearchProvince onProvinceSelect={handleSearchSelect} />
       <AudioController onAudioRefsReady={handleAudioRefsReady} />
@@ -170,6 +243,15 @@ const MapComponent = () => {
           province={selectedProvince}
           onClose={handleClosePanel}
         />
+      )}
+
+      {/* Mobile Hint - Shows briefly on first load */}
+      {isMobile && (
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[999] pointer-events-none">
+          <div className="bg-black/80 text-white text-xs px-4 py-2 rounded-full border border-[var(--color-secondary)] animate-pulse-slow">
+            Tap: Preview • Double-tap: Details
+          </div>
+        </div>
       )}
     </main>
   );
