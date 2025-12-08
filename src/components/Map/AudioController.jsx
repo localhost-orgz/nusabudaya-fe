@@ -100,7 +100,7 @@ const AudioController = ({ onAudioRefsReady }) => {
   return (
     <button
       onClick={toggleMusic}
-      className="absolute bottom-6 right-6 z-1000 bg-(--color-primary-90) backdrop-blur-md border border-(--color-secondary) p-3 rounded-full hover:bg-(--color-secondary) transition-all duration-300 group"
+      className="absolute right-5 md:right-3 top-2.5 md:top-3 z-1000 bg-(--color-primary-90) backdrop-blur-md border border-(--color-secondary) p-3 rounded-full hover:bg-(--color-secondary) transition-all duration-300 group"
       title={isMusicOn ? "Turn off music" : "Turn on music"}
     >
       {isMusicOn ? (

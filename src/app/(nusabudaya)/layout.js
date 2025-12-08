@@ -8,7 +8,7 @@ const MainLayout = ({ children }) => {
         <Sidebar />
       </div>
 
-      <main className="pl-64 h-full">
+      <main className="md:pl-64 md:pb-0 pb-18 h-full">
         <div className="h-full w-full">{children}</div>
       </main>
     </>

@@ -38,7 +38,7 @@ const DetailProvince = ({ province, onClose }) => {
 
   return (
     <>
-      <div className="panel w-[400px] h-screen fixed z-9999 top-0 left-64 bg-[#0D1922] backdrop-blur-md shadow-2xl border-r border-gray-200 overflow-y-auto py-8 px-5 text-slate-800">
+      <div className="panel md:w-[400px] w-full md:h-screen h-[calc(100vh-72px)] fixed z-9999 top-0 md:left-64 bg-[#0D1922] backdrop-blur-md shadow-2xl border-r border-gray-200 overflow-y-auto py-8 px-5 text-slate-800">
         {/* ✨ TOMBOL CLOSE (X) */}
         <button
           onClick={handleCloseClick}
