@@ -1,25 +1,18 @@
 import GamesCard from "@/components/Arena/GamesCard";
+import HeaderSection from "@/components/HeaderSection";
 import { Gamepad2, Zap } from "lucide-react";
 import React from "react";
 
 const page = () => {
   return (
     <main className="bg-(--color-primary) md:min-h-screen overflow-auto h-[calc(100vh-72px)] p-8">
-      <span className="text-[#c7c7c7] font-medium">
-        NusaBudaya /
-        <span className="text-(--color-secondary)"> NusaArena </span>
-      </span>
-
-      {/* header */}
-      <div className="w-[40%] mt-4">
-        <h1 className="text-4xl text-white font-bold leading-10">
-          Pilih Permainan yang Ingin Kamu Mainkan
-        </h1>
-        <p className="text-sm text-[#c7c7c7] mt-3 ">
-          Belajar budaya Indonesia dengan game yang seru dan interaktif. Pilih
-          tantangan dan mulai petualangan budaya kamu hari ini!
-        </p>
-      </div>
+      <HeaderSection
+        breadcrumb={"NusaArena"}
+        sectionTitle={"Pilih Permainan yang Ingin Kamu Mainkan"}
+        description={
+          "Belajar budaya Indonesia dengan game yang seru dan interaktif. Pilih tantangan dan mulai petualangan budaya kamu hari ini!"
+        }
+      />
 
       {/* statistik */}
       <div className="w-full my-5">
