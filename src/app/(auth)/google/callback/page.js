@@ -14,7 +14,7 @@ export default function GoogleCallbackPage() {
          router.push("/atlas");
       } else {
          alert("Login gagal!");
-         router.push("/signin");
+         router.push("/login");
       }
    }, [router]);
 
