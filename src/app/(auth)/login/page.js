@@ -3,7 +3,7 @@ import React from "react";
 
 const LoginPage = () => {
   return (
-    <main className="min-h-screen lg:h-screen w-full flex flex-col lg:flex-row bg-gradient-to-br from-[#05121b] to-[#0D1922]">
+    <main className="min-h-screen lg:h-screen w-full flex flex-col lg:flex-row bg-linear-to-br from-[#05121b] to-[#0D1922]">
       {/* Left Section */}
       <div className="w-full lg:w-2/5 xl:w-1/2 flex items-center justify-center p-6 lg:p-10">
         <div className="w-full max-w-md space-y-8">
@@ -21,7 +21,7 @@ const LoginPage = () => {
           </div>
 
           {/* Google OAuth Button */}
-          <Link href="/login mb-3">
+          <Link href="/">
             <button className="w-full bg-white border-2 border-gray-200 hover:border-gray-300 hover:bg-gray-200 transition-all duration-300 rounded-xl px-6 py-2.5 flex items-center justify-center gap-3 text-gray-700 font-semibold text-base group">
               <svg
                 className="w-5 h-5 group-hover:scale-110 transition-transform"
