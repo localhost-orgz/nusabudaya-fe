@@ -273,6 +273,40 @@ const NusaBudayaLens = () => {
             </div>
           )}
         </div>
+        {/* Examples Section - Only show when no image uploaded */}
+        {!uploadedImage && (
+          <div className="mt-12">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="h-7 border-2 rounded-full border-[#c8a668]"></div>
+              <h2 className="text-lg md:text-xl text-white font-semibold">
+                Contoh Objek Budaya yang Dapat Dianalisis
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { name: "Tarian Tradisional", icon: "💃" },
+                { name: "Rumah Adat", icon: "🏘️" },
+                { name: "Pakaian Adat", icon: "👘" },
+                { name: "Alat Musik", icon: "🎵" },
+                { name: "Senjata Tradisional", icon: "⚔️" },
+                { name: "Makanan Khas", icon: "🍜" },
+                { name: "Kerajinan Tangan", icon: "🎨" },
+                { name: "Upacara Adat", icon: "🎭" },
+              ].map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-[#0D1922] border border-[#5B5B5B] hover:border-[#c8a668] rounded-lg p-4 text-center transition-all duration-200 cursor-pointer group"
+                >
+                  <div className="text-3xl md:text-4xl mb-2">{item.icon}</div>
+                  <div className="text-white text-sm md:text-base font-medium group-hover:text-[#c8a668] transition-colors">
+                    {item.name}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </main>
   );
