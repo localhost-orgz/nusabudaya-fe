@@ -1,6 +1,14 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { Camera, Upload, X, RefreshCw, Info, BookAlert } from "lucide-react"; // Nambah icon X untuk close camera
+import {
+  Camera,
+  Upload,
+  X,
+  RefreshCw,
+  Info,
+  BookAlert,
+  SearchX,
+} from "lucide-react"; // Nambah icon X untuk close camera
 import HeaderSection from "@/components/HeaderSection";
 import InfoCard from "@/components/Lens/InfoCard";
 import UploadPlaceholder from "@/components/Lens/UploadPlaceholder";
@@ -8,6 +16,7 @@ import AiResponse from "@/components/Lens/AiResponse";
 import LoadingResult from "@/components/Lens/LoadingResult";
 import PreviewImage from "@/components/Lens/PreviewImage";
 import { apiRequest } from "@/utils/api";
+import NotCulture from "@/components/Lens/NotCulture";
 
 const NusaBudayaLens = () => {
   const [uploadedImage, setUploadedImage] = useState(null);
@@ -266,8 +275,10 @@ const NusaBudayaLens = () => {
               <PreviewImage image={uploadedImage} onReset={handleReset} />
 
               {/* AI Analysis Result */}
-              {isAnalyzing ? (
+              {!isAnalyzing ? (
                 <LoadingResult />
+              ) : aiResponse && aiResponse.isCultural === false ? (
+                <NotCulture />
               ) : (
                 aiResponse && (
                   <AiResponse response={aiResponse} onReset={handleReset} />
@@ -277,7 +288,7 @@ const NusaBudayaLens = () => {
           )}
         </div>
         {/* Examples Section - Only show when no image uploaded */}
-        {!uploadedImage && (
+        {false && (
           <div className="mt-12">
             <div className="flex items-center gap-2 mb-6">
               <div className="h-7 border-2 rounded-full border-[#c8a668]"></div>
