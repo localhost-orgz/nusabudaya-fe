@@ -1,4 +1,4 @@
-import { ChessKnight, Map, ScanSearch } from "lucide-react";
+import { ChessKnight, Map, ScanSearch, Shirt } from "lucide-react";
 
 export const LIST_SIDEBAR = [
   {
@@ -15,5 +15,10 @@ export const LIST_SIDEBAR = [
     icon: ScanSearch,
     path: "/lens",
     label: "Lens",
+  },
+  {
+    icon: Shirt,
+    path: "/mockup",
+    label: "Mockup Batik",
   },
 ];
