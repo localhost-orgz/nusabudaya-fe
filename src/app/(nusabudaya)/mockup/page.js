@@ -510,7 +510,7 @@ const BatikDesigner = () => {
                   </div>
                 </div>
               ) : (
-                <div className="flex items-center justify-center bg-gradient-to-br from-[#1a2832] to-[#0D1922] rounded-lg border border-[#5B5B5B] overflow-auto">
+                <div className="flex items-center justify-center bg-linear-to-br from-[#1a2832] to-[#0D1922] rounded-lg border border-[#5B5B5B] overflow-auto">
                   <canvas
                     ref={canvasRef}
                     width={800}

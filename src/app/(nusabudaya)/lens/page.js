@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useRef, useEffect } from "react";
-import { Camera, Upload, X, RefreshCw } from "lucide-react"; // Nambah icon X untuk close camera
+import { Camera, Upload, X, RefreshCw, Info, BookAlert } from "lucide-react"; // Nambah icon X untuk close camera
 import HeaderSection from "@/components/HeaderSection";
 import InfoCard from "@/components/Lens/InfoCard";
 import UploadPlaceholder from "@/components/Lens/UploadPlaceholder";
@@ -170,6 +170,21 @@ const NusaBudayaLens = () => {
           sectionTitle="NusaLens AI"
           description="Upload atau ambil foto objek budaya Indonesia untuk mendapatkan informasi lengkap dan detail dari AI kami."
         />
+
+        <div className="w-full p-4 border border-(--color-secondary) bg-(--color-secondary)/25 mb-5 -mt-3 rounded-xl">
+          <div className="flex items-center gap-3 mb-2">
+            <BookAlert className="stroke-(--color-secondary) w-5 h-5" />
+            <span className="uppercase text-(--color-secondary) font-bold tracking-wide">
+              Disclaimer
+            </span>
+          </div>
+          <p className="text-(--color-secondary)">
+            NusaLens AI masih dalam tahap pengembangan dan penyempurnaan.
+            Informasi yang dihasilkan bersifat referensi dan mungkin belum
+            sepenuhnya akurat. Kami menyarankan pengguna untuk memverifikasi
+            kembali informasi dengan sumber tepercaya.
+          </p>
+        </div>
 
         {/* Main Content */}
         <div className="w-full">
