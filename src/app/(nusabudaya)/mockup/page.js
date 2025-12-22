@@ -229,7 +229,7 @@ const MockupBatik = () => {
               <div className="bg-[#0D1922] border border-[#1e2f3d] rounded-2xl h-[600px] flex flex-col items-center justify-center text-center p-8">
                 <Box className="w-20 h-20 stroke-[#c7c7c7] mb-4 animate-bounce" />
                 <h3 className="text-2xl font-bold text-white mb-2">
-                  Menunggu gambar motif batik...{" "}
+                  Menunggu motif batik...{" "}
                 </h3>
                 <p className="text-slate-500 max-w-sm">
                   Upload motif batik kamu untuk memulai visualisasi produk
