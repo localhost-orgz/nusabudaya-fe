@@ -1,4 +1,11 @@
-import { ChessKnight, Map, PaintBucket, ScanSearch, Shirt } from "lucide-react";
+import {
+  ChessKnight,
+  Map,
+  ScanSearch,
+  Shirt,
+  PaintBucket,
+  Type,
+} from "lucide-react";
 
 export const LIST_SIDEBAR = [
   {
@@ -17,8 +24,24 @@ export const LIST_SIDEBAR = [
     label: "Lens",
   },
   {
-    icon: PaintBucket,
-    path: "/mockup",
-    label: "Mockup",
+    icon: Shirt,
+    label: "Batik",
+    children: [
+      {
+        icon: PaintBucket,
+        path: "/batik/buat-batik",
+        label: "Buat Batik",
+      },
+      {
+        icon: PaintBucket,
+        path: "/mockup",
+        label: "Mockup Batik",
+      },
+    ],
+  },
+  {
+    icon: Type,
+    path: "/aksara",
+    label: "Aksara",
   },
 ];
