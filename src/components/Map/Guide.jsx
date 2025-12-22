@@ -2,7 +2,7 @@
 
 import { CircleHelp, Laptop, TabletSmartphone, X } from "lucide-react";
 import React, { useRef, useState } from "react";
-import { DESKTOP_GUIDES, MOBILE_GUIDES } from "@/constants/listGuide";
+import { DESKTOP_GUIDES, MOBILE_GUIDES } from "@/constants/listGuideAtlas";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 

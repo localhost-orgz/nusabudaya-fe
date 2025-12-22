@@ -1,400 +1,213 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
-import {
-  Upload,
-  RotateCw,
-  Download,
-  X,
-  Shirt,
-  ShoppingBag,
-  ZoomIn,
-  ZoomOut,
-} from "lucide-react";
 
-const BatikDesigner = () => {
+import React, { useState, useRef, Suspense } from "react";
+import { Upload, Download, X, Layers, Box, Sparkles } from "lucide-react";
+import { Canvas, useLoader } from "@react-three/fiber";
+import {
+  OrbitControls,
+  Environment,
+  PerspectiveCamera,
+} from "@react-three/drei";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import * as THREE from "three";
+import HeaderSection from "@/components/HeaderSection";
+import GuideMockup from "@/components/Mockup/GuideMockup";
+
+function BatikModel({ modelPath, textureUrl }) {
+  const gltf = useLoader(GLTFLoader, modelPath);
+  const texture = textureUrl
+    ? useLoader(THREE.TextureLoader, textureUrl)
+    : null;
+
+  React.useEffect(() => {
+    if (gltf) {
+      if (texture) {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        texture.needsUpdate = true;
+
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
+              map: texture,
+              metalness: 0,
+              roughness: 1,
+            });
+          }
+        });
+      } else {
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
+              color: 0x333333,
+              roughness: 1,
+            });
+          }
+        });
+      }
+    }
+  }, [textureUrl, gltf, texture]);
+
+  return <primitive object={gltf.scene} />;
+}
+
+function LoadingModel() {
+  return (
+    <mesh>
+      <sphereGeometry args={[0.5, 16, 16]} />
+      <meshStandardMaterial color="#c8a668" wireframe />
+    </mesh>
+  );
+}
+
+function ModelCanvas({ modelPath, textureUrl, cameraPosition, cameraFov }) {
+  return (
+    <Canvas
+      shadows
+      gl={{ preserveDrawingBuffer: true, antialias: true }}
+      className="cursor-grab active:cursor-grabbing"
+    >
+      <PerspectiveCamera
+        makeDefault
+        position={cameraPosition}
+        fov={cameraFov}
+      />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[10, 10, 5]} intensity={1} castShadow />
+      <pointLight position={[-5, 5, -5]} intensity={0.5} color="#c8a668" />
+
+      <Suspense fallback={<LoadingModel />}>
+        <BatikModel modelPath={modelPath} textureUrl={textureUrl} />
+      </Suspense>
+
+      <OrbitControls
+        enableZoom={true}
+        makeDefault
+        minDistance={1}
+        maxDistance={5}
+      />
+      <Environment preset="city" environmentIntensity={0.5} />
+    </Canvas>
+  );
+}
+
+// --- Main Designer Component ---
+const MockupBatik = () => {
   const [uploadedPattern, setUploadedPattern] = useState(null);
-  const [selectedMockup, setSelectedMockup] = useState("tshirt");
-  const [rotation, setRotation] = useState(0);
-  const [scale, setScale] = useState(1);
   const [isDragging, setIsDragging] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(true);
   const fileInputRef = useRef(null);
-  const canvasRef = useRef(null);
 
   const mockups = [
-    { id: "tshirt", name: "Long Sleeve T-Shirt", icon: Shirt },
-    { id: "dress", name: "Woman Dress", icon: "👗" },
-    { id: "bag", name: "Tote Bag", icon: ShoppingBag },
+    {
+      id: "tshirt",
+      name: "Modern T-Shirt",
+      model: "/models/baju.glb",
+      pos: [0, 0, 1.8],
+      fov: 40,
+    },
+    {
+      id: "dress",
+      name: "Elegant Dress",
+      model: "/models/dress.glb",
+      pos: [0, 0.8, 2.5],
+      fov: 45,
+    },
+    {
+      id: "bag",
+      name: "Premium Tote",
+      model: "/models/bag.glb",
+      pos: [1.2, 0.5, 1.8],
+      fov: 40,
+    },
   ];
 
-  useEffect(() => {
-    if (uploadedPattern && canvasRef.current) {
-      drawMockup();
-    }
-  }, [uploadedPattern, selectedMockup, rotation, scale]);
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file && file.type.startsWith("image/")) {
+  const handleFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file?.type.startsWith("image/")) {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        setUploadedPattern(e.target.result);
-      };
+      reader.onload = (ev) => setUploadedPattern(ev.target.result);
       reader.readAsDataURL(file);
     }
   };
 
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setUploadedPattern(event.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const drawMockup = () => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-
-    img.onload = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
-
-      if (selectedMockup === "tshirt") {
-        drawTShirt(ctx, img);
-      } else if (selectedMockup === "dress") {
-        drawDress(ctx, img);
-      } else if (selectedMockup === "bag") {
-        drawBag(ctx, img);
-      }
-
-      ctx.restore();
-    };
-
-    img.src = uploadedPattern;
-  };
-
-  const drawTShirt = (ctx, img) => {
-    const centerX = 400;
-    const centerY = 300;
-
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.scale(scale, scale);
-
-    // T-shirt body
-    ctx.beginPath();
-    ctx.moveTo(-120, -100);
-    ctx.lineTo(120, -100);
-    ctx.lineTo(120, 180);
-    ctx.lineTo(-120, 180);
-    ctx.closePath();
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.strokeStyle = "#999";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(-120, -100, 240, 280);
-      ctx.restore();
-    }
-
-    // Collar
-    ctx.beginPath();
-    ctx.arc(0, -100, 30, 0, Math.PI, true);
-    ctx.fillStyle = "#e0e0e0";
-    ctx.fill();
-    ctx.stroke();
-
-    // Left sleeve
-    ctx.beginPath();
-    ctx.moveTo(-120, -80);
-    ctx.lineTo(-200, -80);
-    ctx.lineTo(-190, 60);
-    ctx.lineTo(-120, 60);
-    ctx.closePath();
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(-200, -80, 80, 140);
-      ctx.restore();
-    }
-
-    // Right sleeve
-    ctx.beginPath();
-    ctx.moveTo(120, -80);
-    ctx.lineTo(200, -80);
-    ctx.lineTo(190, 60);
-    ctx.lineTo(120, 60);
-    ctx.closePath();
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(120, -80, 80, 140);
-      ctx.restore();
-    }
-
-    ctx.restore();
-  };
-
-  const drawDress = (ctx, img) => {
-    const centerX = 400;
-    const centerY = 300;
-
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.scale(scale, scale);
-
-    // Dress body (A-line)
-    ctx.beginPath();
-    ctx.moveTo(-80, -120);
-    ctx.lineTo(80, -120);
-    ctx.lineTo(140, 180);
-    ctx.lineTo(-140, 180);
-    ctx.closePath();
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.strokeStyle = "#999";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(-140, -120, 280, 300);
-      ctx.restore();
-    }
-
-    // Collar
-    ctx.beginPath();
-    ctx.arc(0, -120, 40, 0, Math.PI, true);
-    ctx.fillStyle = "#e0e0e0";
-    ctx.fill();
-    ctx.stroke();
-
-    // Left sleeve
-    ctx.beginPath();
-    ctx.arc(-80, -90, 35, 0, Math.PI * 2);
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(-115, -125, 70, 70);
-      ctx.restore();
-    }
-
-    // Right sleeve
-    ctx.beginPath();
-    ctx.arc(80, -90, 35, 0, Math.PI * 2);
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(45, -125, 70, 70);
-      ctx.restore();
-    }
-
-    ctx.restore();
-  };
-
-  const drawBag = (ctx, img) => {
-    const centerX = 400;
-    const centerY = 300;
-
-    ctx.save();
-    ctx.translate(centerX, centerY);
-    ctx.rotate((rotation * Math.PI) / 180);
-    ctx.scale(scale, scale);
-
-    // Bag body
-    ctx.beginPath();
-    ctx.moveTo(-140, -100);
-    ctx.lineTo(140, -100);
-    ctx.lineTo(140, 160);
-    ctx.lineTo(-140, 160);
-    ctx.closePath();
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fill();
-    ctx.strokeStyle = "#999";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    if (img.complete) {
-      ctx.save();
-      ctx.clip();
-      const pattern = ctx.createPattern(img, "repeat");
-      ctx.fillStyle = pattern;
-      ctx.fillRect(-140, -100, 280, 260);
-      ctx.restore();
-    }
-
-    // Handles
-    ctx.strokeStyle = "#666";
-    ctx.lineWidth = 8;
-    ctx.lineCap = "round";
-
-    ctx.beginPath();
-    ctx.moveTo(-90, -100);
-    ctx.bezierCurveTo(-90, -160, -50, -160, -50, -100);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(50, -100);
-    ctx.bezierCurveTo(50, -160, 90, -160, 90, -100);
-    ctx.stroke();
-
-    // Bottom detail
-    ctx.beginPath();
-    ctx.moveTo(-140, 140);
-    ctx.lineTo(-20, 160);
-    ctx.lineTo(20, 160);
-    ctx.lineTo(140, 140);
-    ctx.strokeStyle = "#999";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    ctx.restore();
-  };
-
-  const handleRotate = () => {
-    setRotation((prev) => (prev + 45) % 360);
-  };
-
-  const handleZoomIn = () => {
-    setScale((prev) => Math.min(prev + 0.1, 2));
-  };
-
-  const handleZoomOut = () => {
-    setScale((prev) => Math.max(prev - 0.1, 0.5));
-  };
-
-  const handleDownload = () => {
-    if (canvasRef.current) {
-      const link = document.createElement("a");
-      link.download = `batik-mockup-${selectedMockup}.png`;
-      link.href = canvasRef.current.toDataURL();
-      link.click();
-    }
-  };
-
-  const handleReset = () => {
-    setUploadedPattern(null);
-    setRotation(0);
-    setScale(1);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
+  const handleDownload = (id) => alert(`Memproses export 3D untuk ${id}... 🚀`);
 
   return (
-    <div className="min-h-screen bg-[#05121b] p-4 md:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="mb-6">
-            <span className="text-[#c7c7c7] font-medium text-sm md:text-base">
-              NusaBudaya /{" "}
-              <span className="text-[#c8a668]">Batik Designer</span>
-            </span>
-          </div>
-          <h1 className="text-3xl md:text-4xl text-white font-bold mb-3">
-            Batik 3D Designer
-          </h1>
-          <p className="text-[#c7c7c7] text-sm md:text-base max-w-2xl">
-            Upload motif batik Anda dan lihat bagaimana tampilannya pada
-            berbagai produk fashion 3D
-          </p>
-        </div>
+    <div className="min-h-screen bg-[#05121b] text-slate-200">
+      <div className="max-w-[1600px] mx-auto p-4 md:p-8">
+        <HeaderSection
+          breadcrumb="Mockup Center"
+          sectionTitle="NusaDesign 3D"
+          description="Transformasi motif tradisional ke produk fashion masa kini."
+        />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left Panel */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Upload Section */}
-            <div className="bg-[#0D1922] border border-[#5B5B5B] rounded-xl p-6">
-              <h2 className="text-white font-semibold text-lg mb-4">
-                Upload Batik Pattern
-              </h2>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10">
+          {/* 🛠 SIDEBAR CONTROLS (4 Cols) */}
+          <aside className="lg:col-span-4 space-y-6">
+            <div className="bg-[#0D1922] border border-[#1e2f3d] rounded-2xl p-6 sticky top-8">
+              <div className="flex items-center gap-2 mb-6">
+                <Layers className="text-[#c8a668] w-5 h-5" />
+                <h2 className="text-xl font-bold tracking-tight">
+                  Mockup Batik
+                </h2>
+              </div>
 
+              {/* Upload Box */}
               {!uploadedPattern ? (
                 <div
-                  className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-colors ${
-                    isDragging
-                      ? "border-[#c8a668] bg-[#c8a668]/10"
-                      : "border-[#5B5B5B] hover:border-[#c8a668]"
-                  }`}
                   onDragOver={(e) => {
                     e.preventDefault();
                     setIsDragging(true);
                   }}
                   onDragLeave={() => setIsDragging(false)}
-                  onDrop={handleDrop}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDragging(false);
+                    const file = e.dataTransfer.files[0];
+                    if (file?.type.startsWith("image/")) {
+                      const reader = new FileReader();
+                      reader.onload = (ev) =>
+                        setUploadedPattern(ev.target.result);
+                      reader.readAsDataURL(file);
+                    }
+                  }}
                   onClick={() => fileInputRef.current?.click()}
+                  className={`group border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300 ${
+                    isDragging
+                      ? "border-[#c8a668] bg-[#c8a668]/5"
+                      : "border-[#1e2f3d] hover:border-[#c8a668]/50"
+                  }`}
                 >
-                  <Upload className="w-12 h-12 text-[#c8a668] mx-auto mb-4" />
-                  <p className="text-white mb-2">
-                    Drag & drop atau klik untuk upload
-                  </p>
-                  <p className="text-[#c7c7c7] text-sm">
-                    PNG, JPG, JPEG (Max 5MB)
+                  <div className="bg-[#1a2832] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                    <Upload className="w-8 h-8 text-[#c8a668]" />
+                  </div>
+                  <p className="font-medium text-white">Klik atau Drop Motif</p>
+                  <p className="text-sm text-slate-500 mt-1">
+                    PNG, JPG up to 5MB
                   </p>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  <div className="relative rounded-lg overflow-hidden border border-[#5B5B5B]">
+                  <div className="relative group rounded-xl overflow-hidden border border-[#c8a668]/30">
                     <img
                       src={uploadedPattern}
-                      alt="Uploaded batik"
-                      className="w-full h-48 object-cover"
+                      alt="Preview"
+                      className="w-full h-52 object-cover"
                     />
-                    <button
-                      onClick={handleReset}
-                      className="absolute top-2 right-2 p-2 bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
-                    >
-                      <X className="w-4 h-4 text-white" />
-                    </button>
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        onClick={() => setUploadedPattern(null)}
+                        className="bg-red-500 p-3 rounded-full hover:scale-110 transition-transform"
+                      >
+                        <X className="w-5 h-5 text-white" />
+                      </button>
+                    </div>
                   </div>
-                  <p className="text-[#c7c7c7] text-sm text-center">
-                    Pattern uploaded successfully!
-                  </p>
+                  <div className="flex items-center gap-3 p-3 bg-[#c8a668]/10 rounded-lg border border-[#c8a668]/20 text-[#c8a668] text-sm">
+                    <Sparkles className="w-4 h-4" />
+                    <span>Motif siap diterapkan ke model 3D!</span>
+                  </div>
                 </div>
               )}
 
@@ -405,126 +218,62 @@ const BatikDesigner = () => {
                 onChange={handleFileUpload}
                 className="hidden"
               />
+
+              <GuideMockup />
             </div>
+          </aside>
 
-            {/* Mockup Selection */}
-            {uploadedPattern && (
-              <div className="bg-[#0D1922] border border-[#5B5B5B] rounded-xl p-6">
-                <h2 className="text-white font-semibold text-lg mb-4">
-                  Select Mockup
-                </h2>
-                <div className="grid grid-cols-3 gap-3">
-                  {mockups.map((mockup) => {
-                    const IconComp =
-                      typeof mockup.icon === "string" ? null : mockup.icon;
-                    return (
-                      <button
-                        key={mockup.id}
-                        onClick={() => setSelectedMockup(mockup.id)}
-                        className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all ${
-                          selectedMockup === mockup.id
-                            ? "border-[#c8a668] bg-[#c8a668]/10"
-                            : "border-[#5B5B5B] hover:border-[#c8a668]/50"
-                        }`}
-                      >
-                        {IconComp ? (
-                          <IconComp className="w-8 h-8 text-white mb-2" />
-                        ) : (
-                          <span className="text-4xl mb-2">{mockup.icon}</span>
-                        )}
-                        <span className="text-white text-xs text-center">
-                          {mockup.name}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
+          {/* 🎭 MAIN PREVIEW (8 Cols) */}
+          <main className="lg:col-span-8">
+            {!uploadedPattern ? (
+              <div className="bg-[#0D1922] border border-[#1e2f3d] rounded-2xl h-[600px] flex flex-col items-center justify-center text-center p-8">
+                <Box className="w-20 h-20 stroke-[#c7c7c7] mb-4 animate-bounce" />
+                <h3 className="text-2xl font-bold text-white mb-2">
+                  Menunggu gambar motif batik...{" "}
+                </h3>
+                <p className="text-slate-500 max-w-sm">
+                  Upload motif batik kamu untuk memulai visualisasi produk
+                  secara real-time.
+                </p>
               </div>
-            )}
-
-            {/* Controls */}
-            {uploadedPattern && (
-              <div className="bg-[#0D1922] border border-[#5B5B5B] rounded-xl p-6">
-                <h2 className="text-white font-semibold text-lg mb-4">
-                  Controls
-                </h2>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#c7c7c7] text-sm">Rotate (45°)</span>
-                    <button
-                      onClick={handleRotate}
-                      className="p-2 bg-[#1a2832] hover:bg-[#243442] rounded-lg border border-[#5B5B5B] transition-colors"
-                    >
-                      <RotateCw className="w-5 h-5 text-white" />
-                    </button>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#c7c7c7] text-sm">Zoom</span>
-                    <div className="flex gap-2">
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {mockups.map((m, idx) => (
+                  <div
+                    key={m.id}
+                    className={`bg-[#0D1922] border border-[#1e2f3d] rounded-2xl overflow-hidden flex flex-col transition-all duration-500 hover:border-[#c8a668]/40 ${
+                      idx === 0 ? "md:col-span-2 h-[500px]" : "h-[400px]"
+                    }`}
+                  >
+                    <div className="p-4 flex justify-between items-center border-b border-[#1e2f3d] bg-[#0D1922]/50 backdrop-blur-md z-10">
+                      <span className="text-sm font-bold tracking-tight text-white uppercase">
+                        {m.name}
+                      </span>
                       <button
-                        onClick={handleZoomOut}
-                        disabled={scale <= 0.5}
-                        className="p-2 bg-[#1a2832] hover:bg-[#243442] rounded-lg border border-[#5B5B5B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => handleDownload(m.id)}
+                        className="p-2 hover:bg-[#c8a668]/10 rounded-lg text-[#c8a668] transition-colors"
                       >
-                        <ZoomOut className="w-5 h-5 text-white" />
-                      </button>
-                      <button
-                        onClick={handleZoomIn}
-                        disabled={scale >= 2}
-                        className="p-2 bg-[#1a2832] hover:bg-[#243442] rounded-lg border border-[#5B5B5B] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ZoomIn className="w-5 h-5 text-white" />
+                        <Download className="w-4 h-4" />
                       </button>
                     </div>
-                  </div>
 
-                  <div className="pt-4 border-t border-[#5B5B5B]">
-                    <button
-                      onClick={handleDownload}
-                      className="w-full bg-[#c8a668] hover:bg-[#d4b876] text-[#0D1922] font-semibold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
-                    >
-                      <Download className="w-5 h-5" />
-                      Download Mockup
-                    </button>
+                    <div className="grow relative bg-[#0a161f]">
+                      <ModelCanvas
+                        modelPath={m.model}
+                        textureUrl={uploadedPattern}
+                        cameraPosition={m.pos}
+                        cameraFov={m.fov}
+                      />
+                    </div>
                   </div>
-                </div>
+                ))}
               </div>
             )}
-          </div>
-
-          {/* Right Panel - Canvas */}
-          <div className="lg:col-span-2">
-            <div className="bg-[#0D1922] border border-[#5B5B5B] rounded-xl p-6 h-full">
-              <h2 className="text-white font-semibold text-lg mb-4">
-                3D Preview
-              </h2>
-
-              {!uploadedPattern ? (
-                <div className="flex items-center justify-center h-[500px] md:h-[600px] border-2 border-dashed border-[#5B5B5B] rounded-lg">
-                  <div className="text-center">
-                    <Shirt className="w-16 h-16 md:w-20 md:h-20 text-[#5B5B5B] mx-auto mb-4" />
-                    <p className="text-[#c7c7c7]">
-                      Upload batik pattern to see preview
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center bg-linear-to-br from-[#1a2832] to-[#0D1922] rounded-lg border border-[#5B5B5B] overflow-auto">
-                  <canvas
-                    ref={canvasRef}
-                    width={800}
-                    height={600}
-                    className="max-w-full h-auto"
-                  />
-                </div>
-              )}
-            </div>
-          </div>
+          </main>
         </div>
       </div>
     </div>
   );
 };
 
-export default BatikDesigner;
+export default MockupBatik;
