@@ -23,25 +23,16 @@ const GoldEmblem = () => {
         strokeMiterlimit: 10,
       });
 
-      // gsap.from(split.chars, {
-      //   y: 10,
-      //   opacity: 0,
-      //   stagger: 0.1,
-      //   repeat: -1,
-      //   repeatDelay: 1,
-      // });
-
       const tl = gsap.timeline({
-        repeat: -1, // Ulang terus tanpa henti
-        repeatDelay: 0.4, // Istirahat 2 detik sebelum ngulang/balik
+        repeat: -1,
+        repeatDelay: 0.4,
         defaults: { ease: "power2.in" },
       });
 
-      // 3️⃣ ANIMATION SEQUENCE
       tl.from(paths, {
-        duration: 3, // Aku lamain dikit biar elegan
+        duration: 2.5,
         drawSVG: 0,
-        stagger: 0.1, // Stagger lebih cepet dikit
+        stagger: 0.1,
       })
         .from(
           split.chars,
@@ -59,8 +50,8 @@ const GoldEmblem = () => {
             stroke: "transparent",
             duration: 1,
           },
-          "-=1"
-        ); // Overlap dikit biar smooth
+          "-=1.8"
+        );
     },
     { scope: container }
   );
