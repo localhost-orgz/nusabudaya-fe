@@ -73,7 +73,7 @@ const DetailInfoProvince = ({ context, detail, province, openInfo }) => {
                         Luas Wilayah:
                       </span>
                       <span className="text-white font-medium text-sm md:text-base">
-                        {province.area_km2}
+                        {province.area_km2} km²
                       </span>
                     </div>
                     <div className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4 py-2 border-b border-white/10">

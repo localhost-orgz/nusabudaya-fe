@@ -110,7 +110,6 @@ const MapComponent = () => {
 
       if (provinceData) {
         const detail = await provinceService.getBySlug(provinceData.slug);
-        console.log(detail);
         setSelectedProvince(detail);
       }
     }

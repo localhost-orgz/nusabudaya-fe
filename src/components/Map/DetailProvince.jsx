@@ -69,7 +69,7 @@ const DetailProvince = ({ province, onClose }) => {
           </div>
           <div className="flex justify-between text-white">
             <span className="font-medium">Luas Wilayah</span>
-            <span className="text-amber-100">{province.area_km2}</span>
+            <span className="text-amber-100">{province.area_km2} km²</span>
           </div>
           <div className="flex justify-between text-white">
             <span className="font-medium">Berdiri sejak</span>
