@@ -1,10 +1,10 @@
-// hooks/useCanvas.js
 import { useRef, useState, useEffect } from "react";
 
 export const useCanvas = (color, thickness) => {
   const canvasRef = useRef(null);
   const contextRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [points, setPoints] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -48,6 +48,7 @@ export const useCanvas = (color, thickness) => {
     contextRef.current.beginPath();
     contextRef.current.moveTo(offsetX, offsetY);
     setIsDrawing(true);
+    setPoints([{ x: offsetX, y: offsetY }]);
   };
 
   const draw = (e) => {
@@ -55,6 +56,7 @@ export const useCanvas = (color, thickness) => {
     const { offsetX, offsetY } = getCoordinates(e);
     contextRef.current.lineTo(offsetX, offsetY);
     contextRef.current.stroke();
+    setPoints((prev) => [...prev, { x: offsetX, y: offsetY }]);
   };
 
   const stopDrawing = () => {
@@ -65,7 +67,8 @@ export const useCanvas = (color, thickness) => {
   const clearCanvas = () => {
     const canvas = canvasRef.current;
     contextRef.current.clearRect(0, 0, canvas.width, canvas.height);
+    setPoints([]);
   };
 
-  return { canvasRef, startDrawing, draw, stopDrawing, clearCanvas };
+  return { canvasRef, startDrawing, draw, stopDrawing, clearCanvas, points };
 };
