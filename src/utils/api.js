@@ -5,7 +5,7 @@ export async function apiRequest(endpoint, {
    headers: customHeaders = {}, 
    isFormData = false 
 } = {}) {
-   const baseUrl = "https://api.nusabudaya.id";
+   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL | "https://api.nusabudaya.id";
    const queryString = Object.keys(query).length ? "?" + new URLSearchParams(query).toString() : "";
    const url = `${baseUrl}${endpoint}${queryString}`;
 
