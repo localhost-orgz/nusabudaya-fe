@@ -5,6 +5,7 @@ import {
   Shirt,
   PaintBucket,
   Type,
+  Medal,
 } from "lucide-react";
 
 export const LIST_SIDEBAR = [
@@ -43,5 +44,10 @@ export const LIST_SIDEBAR = [
     icon: Type,
     path: "/aksara",
     label: "Aksara",
+  },
+  {
+    icon: Medal,
+    path: "/leaderboard",
+    label: "Leaderboard",
   },
 ];

@@ -1,23 +1,36 @@
 "use client";
-import Link from "next/link";
 import React, { useState } from "react";
+import Link from "next/link";
 import { LIST_SIDEBAR } from "@/constants/listSidebar";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Zap } from "lucide-react";
+import { ChevronDown, Zap, X, Mail, LogOut } from "lucide-react";
+import ProfileModal from "./ProfileModal";
+import SidebarProfile from "./SidebarProfile";
 
+// Main Sidebar Component
 const Sidebar = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(true);
 
   const isChildActive = (children) =>
     children?.some((child) => pathname.startsWith(child.path));
 
   const user = {
-    name: "Ravinthranath A",
-    email: "ravinthranath@gmail.com",
+    name: "Faza Mumtaz",
+    email: "fazamumtaz091@gmail.com",
     xp: 1600,
     avatar:
       "https://i.pinimg.com/1200x/80/49/d9/8049d9da40247a22b73297710f275a79.jpg",
+    achievements: [
+      "#2 Sumatra Explorer",
+      "#3 Jawa Hunter",
+      "#5 Kalimantan Ranger",
+      "#9 Sulawesi Voyager",
+      "#14 Papua Pathfinder",
+      "#39 Maluku Slayer",
+      "#25 Bali & Nusa Tenggara Wanderer",
+    ],
   };
 
   return (
@@ -35,13 +48,11 @@ const Sidebar = () => {
 
           <div className="w-[90%] border-b border-(--color-secondary) mx-auto my-5 opacity-50 rounded-full" />
 
-          {/* Nav */}
           <div className="flex flex-col space-y-2">
             {LIST_SIDEBAR.map((item, index) => {
               const active =
                 pathname === item.path || isChildActive(item.children);
 
-              // 🔽 ITEM WITH DROPDOWN
               if (item.children) {
                 const open = openDropdown === index;
 
@@ -116,47 +127,8 @@ const Sidebar = () => {
           </div>
         </div>
 
-        {/* Profile Section - Sticky at bottom */}
-        <div className="p-2 border-t border-(--color-secondary) bg-[#0a0f14]">
-          <div className="flex items-center gap-3">
-            {/* Avatar */}
-            <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-(--color-secondary) shrink-0">
-              <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-full h-full object-cover aspect-square"
-                onError={(e) => {
-                  // Fallback to initials if image fails to load
-                  e.target.style.display = "none";
-                  e.target.nextSibling.style.display = "flex";
-                }}
-              />
-              <div
-                className="absolute inset-0 bg-(--color-secondary) hidden items-center justify-center text-white font-bold text-lg"
-                style={{ display: "none" }}
-              >
-                {user.name
-                  .split(" ")
-                  .map((n) => n[0])
-                  .join("")
-                  .toUpperCase()}
-              </div>
-            </div>
-
-            {/* User Info */}
-            <div className="flex-1 min-w-0">
-              <p className="text-white font-semibold text-sm truncate">
-                {user.name}
-              </p>
-              <div className="flex items-center gap-1.5 mt-0.5">
-                <Zap className="w-3.5 h-3.5 fill-(--color-secondary) stroke-(--color-secondary)" />
-                <span className="text-(--color-secondary) text-xs font-bold">
-                  {user.xp} XP
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Profile Section - Sticky at bottom with click handler */}
+        <SidebarProfile onProfileModal={setIsProfileModalOpen} user={user} />
       </div>
 
       {/* Mobile Bottom Bar (NO DROPDOWN, SIMPLE ICONS) */}
@@ -181,6 +153,13 @@ const Sidebar = () => {
           })}
         </div>
       </div>
+
+      {/* Profile Modal */}
+      <ProfileModal
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+        user={user}
+      />
     </>
   );
 };

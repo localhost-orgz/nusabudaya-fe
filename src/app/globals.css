@@ -331,3 +331,37 @@ a:active,
 .animate-pulse-slow {
   animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+.custom-scrollbar {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(200, 166, 104, 0.3) transparent; /* Firefox */
+}
+
+/* Buat Chrome, Edge, & Safari */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px; /* Lebar tipis biar elegan */
+  height: 6px; /* Tinggi (kalau ada horizontal scroll) */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Track-nya transparan aja */
+  margin-block: 4px; /* Kasih jarak dikit dari atas/bawah */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    200,
+    166,
+    104,
+    0.2
+  ); /* Warna Emas transparan (Standby) */
+  border-radius: 100vh; /* Buleet */
+  border: 1px solid transparent; /* Trik biar ga nempel pinggir banget */
+  background-clip: content-box;
+  transition: background-color 0.3s;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #c8a668; /* Warna Emas Solid pas di-hover (Active) 🌟 */
+  cursor: pointer;
+}
