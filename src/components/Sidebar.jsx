@@ -4,14 +4,14 @@ import Link from "next/link";
 import { LIST_SIDEBAR } from "@/constants/listSidebar";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Zap, X, Mail, LogOut } from "lucide-react";
-import ProfileModal from "./ProfileModal";
+import ProfileModal from "./Profile/ProfileModal";
 import SidebarProfile from "./SidebarProfile";
 
 // Main Sidebar Component
 const Sidebar = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState(true);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const isChildActive = (children) =>
     children?.some((child) => pathname.startsWith(child.path));

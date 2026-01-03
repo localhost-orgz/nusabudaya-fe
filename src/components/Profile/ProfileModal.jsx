@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Zap, X, Mail, LogOut } from "lucide-react";
+import Link from "next/link";
 
 const MAP_IMAGES = {
   Sumatra: "/map/sumatra.svg",
@@ -151,14 +152,11 @@ const ProfileModal = ({ isOpen, onClose, user }) => {
 
             <div className="grid md:grid-cols-3 grid-cols-2 gap-3">
               {user.achievements.map((achievement, index) => (
-                <div
-                  key={index}
-                  className="w-full h-full flex flex-col bg-[#0D1922] border border-[#5b5b5b]  rounded-lg"
-                >
+                <div className="w-full h-full flex flex-col bg-[#0D1922] border border-[#5b5b5b] group rounded-lg">
                   <div className="p-5">
                     <img
                       src={getMapImage(achievement)}
-                      className="w-full aspect-square"
+                      className="w-full aspect-square group-hover:scale-110 transition-all duration-300"
                       alt=""
                     />
                   </div>

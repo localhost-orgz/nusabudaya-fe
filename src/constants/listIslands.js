@@ -1,0 +1,58 @@
+export const ISLANDS = [
+  {
+    id: "global",
+    name: "Nasional",
+    slug: "global",
+    image: "/map/indonesia.svg",
+    desc: "Ranking Penjelajah Nusantara",
+  },
+  {
+    id: "sumatra",
+    name: "Sumatra",
+    slug: "sumatra",
+    image: "/map/sumatra.svg",
+    desc: "Sumatra Explorer",
+  },
+  {
+    id: "jawa",
+    name: "Jawa",
+    slug: "jawa",
+    image: "/map/jawa.svg",
+    desc: "Jawa Hunter",
+  },
+  {
+    id: "kalimantan",
+    name: "Kalimantan",
+    slug: "kalimantan",
+    image: "/map/kalimantan.svg",
+    desc: "Kalimantan Ranger",
+  },
+  {
+    id: "sulawesi",
+    name: "Sulawesi",
+    slug: "sulawesi",
+    image: "/map/sulawesi.svg",
+    desc: "Sulawesi Voyager",
+  },
+  {
+    id: "balinusa",
+    name: "Bali & Nusa Tenggara",
+    slug: "balinusa",
+    image: "/map/balinusa.svg",
+    desc: "Bali & Nusa Tenggara wanderer",
+  },
+  {
+    id: "maluku",
+    name: "Maluku",
+    slug: "maluku",
+    image: "/map/maluku.svg",
+    desc: "Maluku Slayer",
+  },
+  {
+    id: "papua",
+    name: "Papua",
+    slug: "papua",
+    image: "/map/papua.svg",
+    desc: "Papua Pathfinder",
+  },
+];

@@ -1,4 +1,4 @@
-import { Zap } from "lucide-react";
+import { ChevronRight, Zap } from "lucide-react";
 import React from "react";
 
 const SidebarProfile = ({ user, onProfileModal }) => {
@@ -43,6 +43,8 @@ const SidebarProfile = ({ user, onProfileModal }) => {
             </span>
           </div>
         </div>
+
+        <ChevronRight className="h-5 w-5 stroke-white" />
       </div>
     </div>
   );
