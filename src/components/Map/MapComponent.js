@@ -166,7 +166,7 @@ const MapComponent = () => {
   };
 
   return (
-    <main className="md:h-screen h-[calc(100vh-72px)] w-full relative">
+    <main className="h-screen w-full relative">
       <MapContainer
         center={[-3.2889889859501693, 118.94523262448598]}
         zoom={6}

@@ -9,9 +9,7 @@ const MainLayout = ({ children }) => {
       </div>
 
       <main className="md:pl-64 h-screen md:min-h-screen">
-        <div className="h-full w-full pb-[72px] md:pb-0 custom-scrollbar">
-          {children}
-        </div>
+        <div className="h-full w-full md:pb-0 custom-scrollbar">{children}</div>
       </main>
     </>
   );

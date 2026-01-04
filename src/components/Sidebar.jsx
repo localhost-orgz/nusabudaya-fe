@@ -3,18 +3,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { LIST_SIDEBAR } from "@/constants/listSidebar";
 import { usePathname } from "next/navigation";
-import { ChevronDown, LogOut } from "lucide-react";
+import { ChevronDown, Menu, X, LogOut } from "lucide-react";
 import ProfileModal from "./Profile/ProfileModal";
 import SidebarProfile from "./SidebarProfile";
 
-// Main Sidebar Component
 const Sidebar = () => {
   const pathname = usePathname();
   const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-
-  const isChildActive = (children) =>
-    children?.some((child) => pathname.startsWith(child.path));
 
   const user = {
     name: "Faza Mumtaz",
@@ -33,24 +30,70 @@ const Sidebar = () => {
     ],
   };
 
+  const isChildActive = (children) =>
+    children?.some((child) => pathname.startsWith(child.path));
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    // Add logout logic here
+    console.log("Logging out...");
+  };
+
   return (
     <>
-      {/* Desktop Sidebar */}
-      <div className="hidden md:flex flex-col w-64 h-full bg-(--color-primary) border-r border-(--color-secondary) fixed">
+      {/* Mobile Menu Button - Fixed at top left */}
+      <button
+        onClick={toggleMobileMenu}
+        className="md:hidden fixed top-4 left-4 z-10001 bg-[#0D1922] border border-(--color-secondary) p-2.5 rounded-lg shadow-lg"
+        aria-label="Toggle menu"
+      >
+        {isMobileMenuOpen ? (
+          <X className="w-6 h-6 stroke-white" />
+        ) : (
+          <Menu className="w-6 h-6 stroke-white" />
+        )}
+      </button>
+
+      {/* Backdrop for mobile */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/60 z-9999 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={`
+        fixed top-0 left-0 h-full bg-(--color-primary) border-r border-(--color-secondary) z-10000
+        flex flex-col
+        transition-transform duration-300 ease-in-out
+        w-64
+        md:translate-x-0
+        ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
+      `}
+      >
         <div className="flex-1 p-5 overflow-y-auto">
           {/* Logo */}
-          <div className="flex items-center justify-start gap-1">
+          <div className="flex items-center justify-start gap-1 mb-4">
             <img src="/logo.svg" alt="" className="w-6 h-6" />
             <h1 className="font-semibold text-md text-(--color-secondary)">
               NusaBudaya
             </h1>
           </div>
 
-          {/* <div className="w-[90%] border-b border-(--color-secondary) mx-auto my-5 opacity-50 rounded-full" /> */}
-
+          {/* Profile Section */}
           <SidebarProfile onProfileModal={setIsProfileModalOpen} user={user} />
 
-          <div className="flex flex-col space-y-2">
+          {/* Navigation */}
+          <div className="flex flex-col space-y-2 mt-4">
             {LIST_SIDEBAR.map((item, index) => {
               const active =
                 pathname === item.path || isChildActive(item.children);
@@ -88,7 +131,11 @@ const Sidebar = () => {
                           const childActive = pathname === child.path;
 
                           return (
-                            <Link href={child.path} key={idx}>
+                            <Link
+                              href={child.path}
+                              key={idx}
+                              onClick={closeMobileMenu}
+                            >
                               <div
                                 className={`px-3 py-2 rounded-md text-sm transition
                                 ${
@@ -110,7 +157,7 @@ const Sidebar = () => {
               }
 
               return (
-                <Link href={item.path} key={index}>
+                <Link href={item.path} key={index} onClick={closeMobileMenu}>
                   <div
                     className={`flex items-center gap-2 px-3 py-2.5 rounded-lg transition
                     ${
@@ -128,35 +175,18 @@ const Sidebar = () => {
             })}
           </div>
         </div>
-        {/* Profile Section - Sticky at bottom with click handler */}
+
+        {/* Logout Button */}
         <div className="px-5 py-4">
-          <button className="flex items-center gap-2 w-full cursor-pointer hover:bg-[color-mix(in_srgb,var(--color-secondary)_50%,transparent)] p-2 rounded-lg transition-all  px-3 py-2.5">
-            <LogOut className="w-5 h-5 stroke-white" />
-            <span className="font-medium text-white">Logout</span>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-2 w-full cursor-pointer text-red-400 border border-transparent hover:border-red-500 hover:bg-red-500/20 p-2 rounded-lg transition-all duration-300 px-3 py-2.5 group"
+          >
+            <LogOut className="w-5 h-5 stroke-white group-hover:stroke-red-500" />
+            <span className="font-medium text-white group-hover:text-red-500">
+              Logout
+            </span>
           </button>
-        </div>
-      </div>
-
-      {/* Mobile Bottom Bar (NO DROPDOWN, SIMPLE ICONS) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-9999 bg-(--color-primary) border-t border-(--color-secondary) pb-safe">
-        <div className="flex items-center justify-around px-4 py-3">
-          {LIST_SIDEBAR.map((item, index) => {
-            if (item.children) return null; // hide dropdown on mobile
-
-            const active = pathname === item.path;
-
-            return (
-              <Link href={item.path} key={index}>
-                <div
-                  className={`p-3 rounded-lg transition ${
-                    active ? "bg-(--color-secondary)" : ""
-                  }`}
-                >
-                  <item.icon className="w-6 h-6 stroke-white" />
-                </div>
-              </Link>
-            );
-          })}
         </div>
       </div>
 

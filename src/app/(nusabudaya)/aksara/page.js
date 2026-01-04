@@ -5,7 +5,7 @@ import React from "react";
 
 function page() {
   return (
-    <main className="bg-(--color-primary) md:min-h-screen overflow-auto h-[calc(100vh-72px)] md:p-8 p-5">
+    <main className="bg-(--color-primary) md:min-h-screen overflow-auto md:p-8 p-5">
       <HeaderSection
         sectionTitle={"Latihan Menulis Aksara"}
         description={"Belajar menulis aksara jawa dengan NusaAksara"}
