@@ -4,7 +4,7 @@ const HeaderSection = ({ breadcrumb, sectionTitle, description }) => {
   return (
     <>
       {/* Breadcrumb */}
-      <div className="mb-6">
+      <div className="mb-6 mt-16 md:mt-0">
         <span className="text-[#c7c7c7] font-medium text-sm md:text-base">
           NusaBudaya / <span className="text-[#c8a668]">{breadcrumb}</span>
         </span>

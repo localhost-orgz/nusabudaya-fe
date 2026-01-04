@@ -49,17 +49,6 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Menu Button - Fixed at top left */}
-      <button
-        onClick={toggleMobileMenu}
-        className="md:hidden fixed top-4 left-4 z-10001 bg-[#0D1922] border border-(--color-secondary) p-2.5 rounded-lg shadow-lg"
-        aria-label="Toggle menu"
-      >
-        {isMobileMenuOpen ? (
-          <X className="w-6 h-6 stroke-white" />
-        ) : (
-          <Menu className="w-6 h-6 stroke-white" />
-        )}
-      </button>
 
       {/* Backdrop for mobile */}
       {isMobileMenuOpen && (
@@ -72,7 +61,7 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={`
-        fixed top-0 left-0 h-full bg-(--color-primary) border-r border-(--color-secondary) z-10000
+        fixed top-0 left-0 h-full bg-(--color-primary) border-r border-(--color-secondary) z-9999
         flex flex-col
         transition-transform duration-300 ease-in-out
         w-64
@@ -80,6 +69,17 @@ const Sidebar = () => {
         ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}
       `}
       >
+        <button
+          onClick={toggleMobileMenu}
+          className={`md:hidden absolute top-4 z-10001 bg-[#0D1922] border border-(--color-secondary) p-2.5 rounded-lg shadow-lg -right-15`}
+          aria-label="Toggle menu"
+        >
+          {isMobileMenuOpen ? (
+            <X className="w-6 h-6 stroke-white" />
+          ) : (
+            <Menu className="w-6 h-6 stroke-white" />
+          )}
+        </button>
         <div className="flex-1 p-5 overflow-y-auto">
           {/* Logo */}
           <div className="flex items-center justify-start gap-1 mb-4">
@@ -180,12 +180,10 @@ const Sidebar = () => {
         <div className="px-5 py-4">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 w-full cursor-pointer text-red-400 border border-transparent hover:border-red-500 hover:bg-red-500/20 p-2 rounded-lg transition-all duration-300 px-3 py-2.5 group"
+            className="flex items-center gap-2 w-full cursor-pointer text-red-400 border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 p-2 rounded-lg transition-all duration-300 px-3 py-2.5 group"
           >
-            <LogOut className="w-5 h-5 stroke-white group-hover:stroke-red-500" />
-            <span className="font-medium text-white group-hover:text-red-500">
-              Logout
-            </span>
+            <LogOut className="w-5 h-5  " />
+            <span className="font-medium ">Logout</span>
           </button>
         </div>
       </div>

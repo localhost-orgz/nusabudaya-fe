@@ -38,20 +38,24 @@ const ProfileModal = ({ isOpen, onClose, user }) => {
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/10 z-9999 backdrop-blur-xs animate-in fade-in duration-200"
-        onClick={onClose}
-      ></div>
+        aria-hidden="true"
+      />
 
-      {/* Modal Container */}
-      <div className="fixed inset-0 z-10000 flex items-center justify-center p-4">
-        <div className="bg-[#0D1922] w-full max-w-lg rounded-xl border border-[#c8a668] animate-in zoom-in duration-300 max-h-[80%] overflow-y-scroll custom-scrollbar">
+      <div
+        className="fixed inset-0 z-10000 flex items-center justify-center p-4"
+        onClick={onClose}
+      >
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="bg-[#0D1922] w-full max-w-lg rounded-xl border border-[#c8a668] animate-in zoom-in duration-300 max-h-[80%] overflow-y-scroll custom-scrollbar"
+        >
           {/* Header with gradient */}
           <div className="relative bg-linear-to-br from-[#c8a668]/20 to-[#c8a668]/5 p-6 border-b border-[#c8a668]/30">
             <button
               onClick={onClose}
-              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors"
+              className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
             >
               <X className="w-5 h-5 text-[#c7c7c7]" />
             </button>
@@ -112,7 +116,7 @@ const ProfileModal = ({ isOpen, onClose, user }) => {
                     {user.achievements.length > INITIAL_LIMIT && (
                       <button
                         onClick={() => setIsBadgesExpanded(!isBadgesExpanded)}
-                        className="text-[10px] text-white/50 hover:text-(--color-secondary) underline decoration-dotted underline-offset-4 transition-colors ml-1"
+                        className="text-[10px] text-white/50 hover:text-(--color-secondary) underline decoration-dotted underline-offset-4 transition-colors ml-1 cursor-pointer"
                       >
                         {isBadgesExpanded
                           ? "Tutup sebagian"
@@ -123,7 +127,7 @@ const ProfileModal = ({ isOpen, onClose, user }) => {
                     )}
                   </div>
                 </div>
-                {/*  */}
+                {/* */}
               </div>
             </div>
           </div>
@@ -174,16 +178,6 @@ const ProfileModal = ({ isOpen, onClose, user }) => {
                   </div>
                 </div>
               ))}
-            </div>
-
-            <div className="flex flex-col gap-3 pt-2">
-              <button
-                onClick={handleLogout}
-                className="w-full bg-red-500/10 hover:bg-red-500/20 text-red-400 font-semibold py-3 px-4 rounded-lg border border-red-500/30 transition-all duration-200 flex items-center justify-center gap-2"
-              >
-                <LogOut className="w-5 h-5" />
-                Logout
-              </button>
             </div>
           </div>
         </div>
