@@ -172,8 +172,8 @@ const NusaBudayaLens = () => {
       <div className="w-full h-full p-4 md:p-8">
         <HeaderSection
           breadcrumb="NusaLens"
-          sectionTitle="NusaLens AI"
-          description="Upload atau ambil foto objek budaya Indonesia untuk mendapatkan informasi lengkap dan detail dari AI kami."
+          sectionTitle="Kenali Warisan Budaya dengan Teknologi AI"
+          description="Identifikasi objek budaya Indonesia secara instan menggunakan bantuan AI. Upload atau ambil gambar, dan dapatkan informasi tentang asal-usul, makna, dan sejarahnya."
         />
 
         <div className="p-4 w-full rounded-lg border border-(--color-secondary) bg-(--color-secondary)/30 -mt-2 mb-5">

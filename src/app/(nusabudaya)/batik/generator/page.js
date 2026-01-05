@@ -51,8 +51,8 @@ const BuatBatikPage = () => {
       <div className="w-full h-full p-4 md:p-8">
         <HeaderSection
           breadcrumb="NusaBatik"
-          sectionTitle="Kreasi Batik AI"
-          description="Unggah sketsa atau referensi gambarmu, dan berikan instruksi untuk membuat motif batik yang unik."
+          sectionTitle="Ciptakan Motif Batik Modern dengan AI"
+          description="Transformasikan ide kreatifmu menjadi desain batik autentik. Upload sketsa atau referensi visual, tambahkan deskripsi motif yang diinginkan, dan biarkan AI menciptakan karya batik unik untukmu."
         />
 
         <div className="w-full max-w-4xl mx-auto mt-8">

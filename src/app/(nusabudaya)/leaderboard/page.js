@@ -65,25 +65,21 @@ export default function Leaderboard() {
       {/* Header */}
       <HeaderSection
         breadcrumb={"Leaderboard"}
-        sectionTitle={"Jawara Budaya"}
+        sectionTitle={"Papan Peringkat Penjelajah Budaya Nusantara"}
         description={
-          "Siapa penjelajah terhebat? Cek posisi kamu di tingkat nasional atau jadilah penguasa di tiap pulau! 🏝️"
+          "Lihat posisimu di antara banyaknya penjelajah budaya Indonesia. Bandingkan pencapaian XP secara nasional atau tantang dirimu untuk menguasai setiap pulau dan raih badge eksklusif!"
         }
       />
 
-      {/* 🏝️ SLIDER PULAU (Region Selector) */}
       <RegionSelector activeTab={activeTab} onActiveTab={setActiveTab} />
 
-      {/* Konten Utama: Tabel & MyRank */}
       <div className="flex flex-col lg:flex-row gap-8 relative">
-        {/* Kolom Kiri: Tabel Leaderboard */}
         <LeaderboardTable
           activeTab={activeTab}
           leaderboardData={leaderboardData}
           isLoading={isLoading}
         />
 
-        {/* Kolom Kanan: Info Panel / My Position */}
         <MyPositionCard
           isLoading={isLoading}
           myPosition={myPosition}

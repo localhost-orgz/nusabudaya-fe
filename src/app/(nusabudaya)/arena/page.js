@@ -8,9 +8,9 @@ const page = () => {
     <main className="bg-(--color-primary) md:min-h-screen overflow-auto md:p-8 p-5">
       <HeaderSection
         breadcrumb={"NusaArena"}
-        sectionTitle={"Pilih Permainan yang Ingin Kamu Mainkan"}
+        sectionTitle={"Asah Pengetahuan Budaya Melalui Permainan Interaktif"}
         description={
-          "Belajar budaya Indonesia dengan game yang seru dan interaktif. Pilih tantangan dan mulai petualangan budaya kamu hari ini!"
+          "Uji kemampuan dan perluas wawasan budaya Indonesia melalui berbagai permainan edukatif. Kumpulkan XP dan jadilah ahli budaya Nusantara!"
         }
       />
 

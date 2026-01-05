@@ -138,8 +138,8 @@ const MockupBatik = () => {
       <div className="max-w-[1600px] mx-auto p-4 md:p-8">
         <HeaderSection
           breadcrumb="NusaBatik"
-          sectionTitle="NusaDesign 3D"
-          description="Transformasi motif tradisional ke produk fashion masa kini."
+          sectionTitle="Visualisasi Batik dalam Produk Fashion 3D"
+          description="Lihat motif batikmu tampil dalam berbagai produk fashion. Upload motif batik dan eksplorasi visualisasi 3D interaktif pada kemeja, dress, dan juga tas."
         />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10">

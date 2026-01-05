@@ -7,8 +7,10 @@ function page() {
   return (
     <main className="bg-(--color-primary) md:min-h-screen overflow-auto md:p-8 p-5">
       <HeaderSection
-        sectionTitle={"Latihan Menulis Aksara"}
-        description={"Belajar menulis aksara jawa dengan NusaAksara"}
+        sectionTitle={"Pelajari Seni Menulis Aksara Jawa"}
+        description={
+          "Lestarikan warisan budaya dengan mempelajari aksara Jawa secara interaktif. Pilih karakter aksara, tuliskan aksara Jawa yang kamu pilih, dan dapatkan feedback langsung dari model recognizer untuk melatih keterampilan kamu."
+        }
         breadcrumb={"NusaAksara"}
       />
 
