@@ -199,7 +199,7 @@ const Memori = () => {
 
                 {/* Front of card (answer) */}
                 <div
-                  className="absolute w-full h-full bg-gradient-to-br from-[#c8a668] to-[#a68850] rounded-md md:rounded-lg flex items-center justify-center border-2 md:border-4 border-[#d4b876] shadow-lg"
+                  className="absolute w-full h-full bg-linear-to-br from-[#c8a668] to-[#a68850] rounded-md md:rounded-lg flex items-center justify-center border-2 md:border-4 border-[#d4b876] shadow-lg"
                   style={{
                     backfaceVisibility: "hidden",
                     WebkitBackfaceVisibility: "hidden",
