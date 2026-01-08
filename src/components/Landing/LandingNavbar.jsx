@@ -6,6 +6,7 @@ import React, { useRef, useState } from "react";
 
 const LandingNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const navbarRef = useRef(null);
   const backdropRef = useRef(null);
   const menuRef = useRef(null);
   const menuItemsRef = useRef([]);
@@ -41,6 +42,15 @@ const LandingNavbar = () => {
       );
     }
   }, [isMenuOpen]);
+
+  useGSAP(() => {
+    gsap.from(navbarRef.current, {
+      opacity: 0,
+      y: "-100%",
+      ease: "power4.out",
+      duration: 1,
+    });
+  }, []);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -83,7 +93,10 @@ const LandingNavbar = () => {
 
   return (
     <>
-      <nav className="w-[90%] md:w-[95%] lg:w-5xl px-4 md:pl-4 md:pr-2.5 h-16 border border-(--color-secondary)/50 fixed bg-(--color-primary) rounded-xl top-2 lg:top-5 z-1000 left-1/2 -translate-x-1/2 flex items-center justify-between">
+      <nav
+        ref={navbarRef}
+        className="w-[90%] md:w-[95%] lg:w-5xl px-4 md:pl-4 md:pr-2.5 h-16 border border-(--color-secondary)/50 fixed bg-(--color-primary) rounded-xl top-2 lg:top-5 z-1000 left-1/2 -translate-x-1/2 flex items-center justify-between"
+      >
         <div className="flex items-center gap-2">
           <img src={"/logo.svg"} className="w-6" />
           <p className="font-bold text-(--color-secondary) mt-1 text-lg">
@@ -94,21 +107,26 @@ const LandingNavbar = () => {
         <div className="hidden md:flex items-center space-x-10 font-medium text-white">
           <a
             href="#home"
-            className="hover:text-(--color-secondary) transition-colors"
+            className="relative group hover:text-(--color-secondary) transition-colors"
           >
             Home
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-secondary) transition-all duration-300 group-hover:w-full"></span>
           </a>
+
           <a
             href="#fitur"
-            className="hover:text-(--color-secondary) transition-colors"
+            className="relative group hover:text-(--color-secondary) transition-colors"
           >
             Fitur
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-secondary) transition-all duration-300 group-hover:w-full"></span>
           </a>
+
           <a
             href="#faq"
-            className="hover:text-(--color-secondary) transition-colors"
+            className="relative group hover:text-(--color-secondary) transition-colors"
           >
             FAQ
+            <span className="absolute left-0 -bottom-1 w-0 h-0.5 bg-(--color-secondary) transition-all duration-300 group-hover:w-full"></span>
           </a>
         </div>
 
@@ -145,7 +163,7 @@ const LandingNavbar = () => {
           <div
             ref={backdropRef}
             onClick={closeMenu}
-            className="fixed inset-0 bg-black/60 z-9 backdrop-blur-sm md:hidden"
+            className="fixed inset-0 bg-black/60 z-15 backdrop-blur-sm md:hidden"
           >
             <div
               ref={menuRef}

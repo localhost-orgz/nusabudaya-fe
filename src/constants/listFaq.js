@@ -7,12 +7,12 @@ export const LIST_FAQ = [
   {
     question: "Apakah NusaBudaya bisa diakses secara gratis?",
     answer:
-      "Tentu saja! Sebagian besar fitur dasar seperti eksplorasi peta dan beberapa mini-games bisa diakses gratis. Kami ingin budaya Indonesia bisa dinikmati oleh siapa saja tanpa hambatan.",
+      "Tentu saja! Semua fitur seperti eksplorasi peta, mini-games, sampai batik studio bisa diakses gratis. Kami ingin budaya Indonesia bisa dinikmati oleh siapa saja tanpa hambatan.",
   },
   {
     question: "Bagaimana cara kerja fitur AI di NusaBudaya?",
     answer:
-      "Fitur 'Lens' kami menggunakan teknologi *computer vision* dan AI generatif. Kamu cukup arahkan kamera atau unggah foto objek budaya (seperti batik atau alat musik), dan AI kami akan mendeteksi serta memberikan penjelasan lengkap mengenai sejarah dan maknanya.",
+      "Fitur NusaLens AI kami menggunakan LLM Gemini API. Kamu cukup arahkan kamera atau unggah foto objek budaya (seperti batik atau alat musik), dan AI kami akan mendeteksi serta memberikan penjelasan lengkap mengenai sejarah dan maknanya.",
   },
   {
     question: "Apakah saya bisa berkontribusi menambahkan data budaya?",
