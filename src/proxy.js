@@ -5,9 +5,9 @@ export default function proxy(request) {
   const { pathname } = request.nextUrl;
 
   // Debug logs
-  console.log("=== [proxy debug] ===");
-  console.log("pathname:", pathname);
-  console.log("access_token:", token);
+  // console.log("=== [proxy debug] ===");
+  // console.log("pathname:", pathname);
+  // console.log("access_token:", token);
 
   const protectedPaths = [
     "/atlas",
@@ -18,7 +18,7 @@ export default function proxy(request) {
   ];
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
-  console.log("isProtected:", isProtected);
+  // console.log("isProtected:", isProtected);
 
   if (isProtected && !token) {
     console.log("Redirecting to /login because protected and no token");

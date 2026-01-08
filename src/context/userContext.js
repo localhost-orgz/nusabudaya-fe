@@ -25,6 +25,7 @@ export function UserProvider({ children }) {
   const logout = async () => {
     try {
       await apiClient.post("/auth/logout");
+      localStorage.removeItem("token");
     } finally {
       setUser(null);
       router.push("/login");
