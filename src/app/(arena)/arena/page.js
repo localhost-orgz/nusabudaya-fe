@@ -3,7 +3,7 @@ import GamesCard from "@/components/Arena/GamesCard";
 import SearchProvince from "@/components/Arena/SearchProvince";
 import HeaderSection from "@/components/HeaderSection";
 import { useGameResultStore } from "@/stores/gameResultStore";
-import { Gamepad2, Zap } from "lucide-react";
+import { CircleStar, Gamepad2, Zap } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useArenaStore } from "@/stores/arenaStore"; // 👈 Import store baru
 
@@ -72,9 +72,9 @@ const page = () => {
           </div>
           <div className="w-full border border-[#5B5B5B] bg-[#0D1922] rounded-lg p-3 flex flex-col gap-1 hover:border-(--color-secondary) hover:bg-[#101b27]">
             <div className="flex items-center gap-1">
-              <Gamepad2 className="stroke-[#c7c7c7] w-5 h-5" />
+              <CircleStar className="stroke-[#c7c7c7] w-5 h-5" />
               <span className="text-[#c7c7c7] font-medium text-md">
-                Permainan Diselesaikan
+                Total Lencana
               </span>
             </div>
             <span className="text-2xl font-semibold text-(--color-secondary) ml-6">

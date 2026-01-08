@@ -10,11 +10,11 @@ export default function proxy(request) {
   console.log("access_token:", token);
 
   const protectedPaths = [
-    // "/atlas",
-    // "/arena",
-    // "/lens",
-    // "/aksara",
-    // "/leaderboard",
+    "/atlas",
+    "/arena",
+    "/lens",
+    "/aksara",
+    "/leaderboard",
   ];
 
   const isProtected = protectedPaths.some((path) => pathname.startsWith(path));
