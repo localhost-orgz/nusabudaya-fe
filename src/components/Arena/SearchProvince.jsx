@@ -8,10 +8,12 @@ const SearchProvince = ({
   options = LIST_PROVINCES,
   label = "Pilih Provinsi",
   onSetProvince, // Callback function buat ngirim data slug ke parent
+  province,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedOption, setSelectedOption] = useState(null);
+  const initialOption = options.find((p) => p.slug === province) || null;
+  const [selectedOption, setSelectedOption] = useState(initialOption);
   const dropdownRef = useRef(null);
 
   // 🔎 Filter logic: Case insensitive search
@@ -29,6 +31,11 @@ const SearchProvince = ({
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  useEffect(() => {
+    const found = options.find((p) => p.slug === province);
+    if (found) setSelectedOption(found);
+  }, [province, options]);
 
   const handleSelect = (option) => {
     setSelectedOption(option);

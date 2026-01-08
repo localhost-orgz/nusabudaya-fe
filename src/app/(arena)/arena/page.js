@@ -4,11 +4,19 @@ import SearchProvince from "@/components/Arena/SearchProvince";
 import HeaderSection from "@/components/HeaderSection";
 import { useGameResultStore } from "@/stores/gameResultStore";
 import { Gamepad2, Zap } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useArenaStore } from "@/stores/arenaStore"; // 👈 Import store baru
 
 const page = () => {
-  const [province, setProvince] = useState("");
+  // const [province, setProvince] = useState("");
+  const { province, setProvince } = useArenaStore();
   const { totalXp, totalBadge } = useGameResultStore();
+
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <main className="bg-(--color-primary) md:min-h-screen overflow-auto md:p-8 p-5">
