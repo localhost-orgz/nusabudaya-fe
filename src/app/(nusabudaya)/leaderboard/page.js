@@ -5,57 +5,38 @@ import React, { useEffect, useState, useRef } from "react";
 import RegionSelector from "@/components/Leaderboard/RegionSelector";
 import MyPositionCard from "@/components/Leaderboard/MyPositionCard";
 import LeaderboardTable from "@/components/Leaderboard/LeaderboardTable";
+import { provinceService } from "@/services/modules/province.service";
+import { achievementService } from "@/services/modules/achievement.service";
 
 export default function Leaderboard() {
-  const [activeTab, setActiveTab] = useState("global");
+  const [activeTab, setActiveTab] = useState("aceh");
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [totalAchiever, setTotalAchiever] = useState(0);
   const [myPosition, setMyPosition] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Fungsi buat simulasi fetch data berdasarkan kategori (Tab)
   const fetchLeaderboard = async (slug) => {
     setIsLoading(true);
+  
+    try {
+      const province = await provinceService.getBySlug(slug);
+  
+      const achievements = await achievementService.getAll(province.id);
+ 
+      setLeaderboardData(achievements.achievements);
+  
+      setMyPosition(achievements.user_rank);
 
-    // Simulasi delay jaringan
-    setTimeout(() => {
-      const isGlobal = slug === "global";
-
-      const mockUsers = [
-        { name: "Rara Jonggrang", avatar: null },
-        { name: "Sangkuriang", avatar: null },
-        { name: "Malin Kundang", avatar: null },
-        { name: "Bawang Merah", avatar: null },
-        { name: "Timun Mas", avatar: null },
-        { name: "Gatot Kaca", avatar: null },
-        { name: "Si Pitung", avatar: null },
-        { name: "Lutung Kasarung", avatar: null },
-      ];
-
-      // Acak urutan biar kelihatan beda tiap pulau
-      const shuffledUsers = [...mockUsers].sort(() => 0.5 - Math.random());
-
-      const data = {
-        top_leaderboard: shuffledUsers.slice(0, 5).map((u, i) => ({
-          rank: i + 1,
-          user: u,
-          // Kalau global pake XP, kalau pulau pake Tanggal dapet badge
-          score: isGlobal ? 2500 - i * 150 : `1${i} Mei 2025`,
-          label: isGlobal ? "XP" : "Unlocked",
-        })),
-        my_position: {
-          rank: isGlobal ? 12 : 8,
-          user: { name: "Kamu", avatar: null },
-          score: isGlobal ? 850 : "Terkunci",
-          label: isGlobal ? "XP" : "Unlocked",
-        },
-      };
-
-      setLeaderboardData(data.top_leaderboard);
-      setMyPosition(data.my_position);
+      setTotalAchiever(achievements.total_achiever);
+    } catch (error) {
+      console.error(error);
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
+  
 
+  console.log(leaderboardData);
   useEffect(() => {
     fetchLeaderboard(activeTab);
   }, [activeTab]);
@@ -67,7 +48,7 @@ export default function Leaderboard() {
         breadcrumb={"Leaderboard"}
         sectionTitle={"Papan Peringkat Penjelajah Budaya Nusantara"}
         description={
-          "Lihat posisimu di antara banyaknya penjelajah budaya Indonesia. Bandingkan pencapaian XP secara nasional atau tantang dirimu untuk menguasai setiap pulau dan raih badge eksklusif!"
+          "Lihat posisimu di antara banyaknya penjelajah budaya Indonesia. Bandingkan pencapaian XP secara nasional atau tantang dirimu untuk menguasai setiap provinsi dan raih lencana eksklusif!"
         }
       />
 
@@ -83,6 +64,8 @@ export default function Leaderboard() {
         <MyPositionCard
           isLoading={isLoading}
           myPosition={myPosition}
+          totalAchiever={totalAchiever}
+          leaderboardData={leaderboardData}
           activeTab={activeTab}
         />
       </div>

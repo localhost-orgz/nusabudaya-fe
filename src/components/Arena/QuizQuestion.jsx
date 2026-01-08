@@ -53,9 +53,9 @@ const QuizQuestion = ({
 
       {/* Answer Options */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-        {question.options.map((option, index) => {
-          const isSelected = selectedAnswer === index;
-          const isCorrect = index === question.correctAnswer;
+        {question.choices.map((option, index) => {
+          const isSelected = selectedAnswer === option;
+          const isCorrect = option === question.answer;
 
           let buttonStyle =
             "bg-[#1a2832] border-[#5B5B5B] hover:border-[#c8a668] hover:bg-[#c8a668]/10";
@@ -73,7 +73,7 @@ const QuizQuestion = ({
           return (
             <button
               key={index}
-              onClick={() => !isAnswered && onAnswerSelect(index)}
+              onClick={() => !isAnswered && onAnswerSelect(option)}
               disabled={isAnswered}
               className={`${buttonStyle} border-2 rounded-xl p-4 md:p-5 text-left transition-all duration-200 transform hover:scale-[1.02] active:scale-[0.98] disabled:cursor-not-allowed disabled:transform-none`}
             >

@@ -21,7 +21,7 @@ function LeaderboardTitle({ activeTab }) {
         <p className="text-xs text-gray-400 ml-8">
           {activeTab === "global"
             ? "Diurutkan berdasarkan total XP tertinggi"
-            : "Urutan penjelajah yang berhasil menaklukkan pulau ini"}
+            : "Urutan penjelajah yang berhasil menaklukkan provinsi ini"}
         </p>
       </div>
     </div>

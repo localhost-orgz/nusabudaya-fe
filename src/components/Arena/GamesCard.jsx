@@ -99,11 +99,12 @@ const GamesCard = ({
   gameDescription,
   gameExp,
   gameDuration,
+  province,
 }) => {
   const gameRoutes = {
-    "Kartu Memori": "/arena/memori",
-    "Tebak Gambar": "/arena/tebak-gambar",
-    Kuis: "/arena/kuis",
+    "Kartu Memori": `/arena/${province.slug}/memori`,
+    "Tebak Gambar": `/arena/${province.slug}/tebak-gambar`,
+    Kuis: `/arena/${province.slug}/quiz`,
   };
 
   const gameLink = gameRoutes[gameName] || "#";

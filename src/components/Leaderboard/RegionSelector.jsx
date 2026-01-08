@@ -6,7 +6,7 @@ function RegionSelector({ activeTab, onActiveTab }) {
     <div className="mt-8 mb-8">
       <div className="flex items-center gap-2 mb-4">
         <MapPinned className="w-5 h-5 text-(--color-secondary)" />
-        <h3 className="font-medium text-lg">Pilih Kategori Peringkat</h3>
+        <h3 className="font-medium text-lg">Pilih Provinsi</h3>
       </div>
 
       <IslandTabs activeTab={activeTab} onActiveTab={onActiveTab} />

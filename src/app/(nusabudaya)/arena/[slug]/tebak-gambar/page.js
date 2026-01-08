@@ -177,7 +177,7 @@ const TebakGambar = () => {
               href="/arena"
               className="text-red-500 py-1.5 px-3 md:px-4 rounded-lg border border-red-500 bg-red-500/30 hover:bg-red-500/50 transition text-sm md:text-base"
             >
-              Keluar
+              Quit
             </Link>
           </div>
         </div>

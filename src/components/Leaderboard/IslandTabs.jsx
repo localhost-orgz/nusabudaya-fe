@@ -1,16 +1,27 @@
 import { ISLANDS } from "@/constants/listIslands";
+import { provinceService } from "@/services/modules/province.service";
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const IslandTabs = ({ onActiveTab, activeTab }) => {
+  const [provinces, setProvinces] = useState([]);
+  useEffect(() => {
+    const fetchProvinces = async () => {
+      const res = await provinceService.getAll();
+      setProvinces(res);
+    }
+
+    fetchProvinces();
+  }, []);
+
   return (
     <div className="flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory custom-scrollbar">
-      {ISLANDS.map((island) => {
-        const isActive = activeTab === island.slug;
+      {provinces.map((province) => {
+        const isActive = activeTab === province.slug;
         return (
           <button
-            key={island.id}
-            onClick={() => onActiveTab(island.slug)}
+            key={province.id}
+            onClick={() => onActiveTab(province.slug)}
             className={`
                   relative group min-w-[140px] h-40 rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-3 transition-all duration-300 snap-center
                   ${
@@ -29,11 +40,11 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
               }`}
             >
               <Image
-                src={island.image}
-                alt={island.name}
+                src={"/map/sumatra.svg"}
+                alt={province.name}
                 fill
                 className={`object-contain ${
-                  island.slug === "global" ? "p-0" : "p-1"
+                  province.slug === "global" ? "p-0" : "p-1"
                 }`}
               />
             </div>
@@ -45,11 +56,11 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
                   isActive ? "text-(--color-secondary)" : "text-gray-300"
                 }`}
               >
-                {island.name}
+                {province.name}
               </span>
               {isActive && (
                 <span className="text-[10px] text-gray-400 mt-1 block px-2 leading-tight">
-                  {island.desc}
+                  {province.badge}
                 </span>
               )}
             </div>
