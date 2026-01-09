@@ -19,6 +19,7 @@ function AksaraPage() {
   const [thickness, setThickness] = useState(5);
   const [modalOpen, setModalOpen] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
+  const [isTutorialOpen, setIsTutorialOpen] = useState(false);
   const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(true);
   const [resultData, setResultData] = useState({
     isSuccess: false,
@@ -35,8 +36,9 @@ function AksaraPage() {
   const { canvasRef, startDrawing, draw, stopDrawing, clearCanvas, points } =
     useCanvas(color, thickness);
 
+  const aksaraData = LIST_AKSARA.find((a) => a.path.includes(slug));
   const handleCheck = () => {
-    const aksaraData = LIST_AKSARA.find((a) => a.path.includes(slug));
+    console.log("DATA MASTER BARU:", JSON.stringify(points.map(p => [p.x, p.y])));
 
     if (!aksaraData || !aksaraData.templatePoints) {
       // alert("Template aksara belum tersedia!");
@@ -129,12 +131,16 @@ function AksaraPage() {
   };
 
   const handleTutorial = () => {
-    setAlertData({
-      title: "Info",
-      message: "Tutorial menulis aksara ini belum tersedia.",
-      type: "info",
-    });
-    setAlertOpen(true);
+    if (aksaraData?.tutorial) {
+      setIsTutorialOpen(true);
+    } else {
+      setAlertData({
+        title: "Info",
+        message: "Tutorial menulis aksara ini belum tersedia.",
+        type: "info",
+      });
+      setAlertOpen(true);
+    }
   };
 
   return (
@@ -189,6 +195,13 @@ function AksaraPage() {
         accuracy={resultData.accuracy}
         aksaraName={resultData.aksaraName}
         onRetry={handleRetry}
+      />
+
+      <ModalTutor
+        isOpen={isTutorialOpen}
+        onClose={() => setIsTutorialOpen(false)}
+        aksaraName={aksaraData?.labelAksara || "-"}
+        tutorialImage={aksaraData?.tutorial}
       />
 
       <AlertModal

@@ -1,7 +1,7 @@
 import { CheckCircle, XCircle, X, RotateCcw, Brush } from "lucide-react";
 import React from "react";
 
-const ModalTutor = ({ isOpen, onClose, aksaraName }) => {
+const ModalTutor = ({ isOpen, onClose, aksaraName, tutorialImage }) => {
   if (!isOpen) return null;
 
   return (
@@ -26,9 +26,6 @@ const ModalTutor = ({ isOpen, onClose, aksaraName }) => {
                   <h2 className={`text-xl font-bold text-green-400`}>
                     Tutorial Menulis Aksara {aksaraName}
                   </h2>
-                  {/* <p className="text-sm text-[#c7c7c7] mt-1 capitalize">
-                    Tutorial Menulis Aksara {aksaraName}
-                  </p> */}
                 </div>
               </div>
               <button
@@ -42,10 +39,17 @@ const ModalTutor = ({ isOpen, onClose, aksaraName }) => {
 
           {/* Content */}
           <div className="p-6 space-y-4">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/baja-4761f.appspot.com/o/contoh%2FHa.gif?alt=media&token=92594c50-3690-407d-98bb-61cb37896037"
-              alt={`Tutorial Aksara ${aksaraName}`}
-            />
+            {tutorialImage ? (
+              <img
+                src={tutorialImage}
+                alt={`Tutorial Aksara ${aksaraName}`}
+                className="w-full h-auto rounded-lg"
+              />
+            ) : (
+              <div className="text-center text-gray-400 py-10">
+                Tutorial belum tersedia
+              </div>
+            )}
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-2">

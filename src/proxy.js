@@ -25,6 +25,6 @@ export default function proxy(request) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  console.log("Access granted, proceeding");
+  // console.log("Access granted, proceeding");
   return NextResponse.next();
 }
