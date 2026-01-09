@@ -5,7 +5,7 @@ export const PROVINCE_MARKERS = [
     slug: "kalimantan-utara",
     position: [3.2224, 116.2116],
     originalIndex: 32,
-    customIcon: "/sumatera.webp",
+    customIcon: "/kalimantan/kalimantan-utara.webp",
     neonColor: {
       className: "neon-province-cyan",
       fillColor: "#008b8b",
