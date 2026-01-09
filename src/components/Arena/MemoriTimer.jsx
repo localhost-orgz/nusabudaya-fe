@@ -9,7 +9,7 @@ const MemoriTimer = ({ timeLeft }) => {
       <div className="w-full rounded-full h-1.5 bg-gray-700">
         <div
           className="h-full rounded-full bg-[#c8a668] transition-all duration-1000"
-          style={{ width: `${(timeLeft / 120) * 100}%` }}
+          style={{ width: `${(timeLeft / 80) * 100}%` }}
         ></div>
       </div>
     </div>

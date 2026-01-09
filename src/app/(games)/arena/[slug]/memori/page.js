@@ -6,6 +6,10 @@ import { Trophy, Clock, Zap, Award, ArrowLeft, Crown } from "lucide-react";
 import MemoriSummary from "@/components/Arena/MemoriSummary";
 import MemoriNav from "@/components/Arena/MemoriNav";
 import MemoriTimer from "@/components/Arena/MemoriTimer";
+import { useParams } from "next/navigation";
+import { provinceService } from "@/services/modules/province.service";
+import { GameType } from "@/constants/gameType";
+import { gameResultService } from "@/services/modules/game-result.service";
 
 const Memori = () => {
   // Card data - 8 pairs of matching cards
@@ -24,11 +28,31 @@ const Memori = () => {
   const [cards, setCards] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
-  const [timeLeft, setTimeLeft] = useState(120); // 120 seconds timer
+  const [timeLeft, setTimeLeft] = useState(80); // 80 seconds timer
   const [gameEnded, setGameEnded] = useState(false);
   const [xpEarned, setXpEarned] = useState(0);
   const [moves, setMoves] = useState(0);
   const [timeUsed, setTimeUsed] = useState(0);
+
+  const { slug } = useParams();
+  const [province, setProvince] = useState(null);
+  const [resultSubmitted, setResultSubmitted] = React.useState(false);
+
+  // Fetch Province
+  useEffect(() => {
+    if (!slug) return;
+
+    const fetchProvince = async () => {
+      try {
+        const data = await provinceService.getBySlug(slug);
+        setProvince(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProvince();
+  }, [slug]);
 
   // Initialize game
   useEffect(() => {
@@ -129,6 +153,30 @@ const Memori = () => {
   };
 
   // Summary Page Component
+  useEffect(() => {
+    if (gameEnded && !resultSubmitted) {
+      const provinceId = province.id;
+      const isComplete = matchedCards.length === cards.length;
+      const type = GameType.MEMORY_CARD;
+      const resultData = {
+        provinceId,
+        type,
+        xp: xpEarned,
+        time: timeUsed,
+        is_complete: isComplete
+      };
+      
+      (async () => {
+        try {
+          await gameResultService.create(resultData);
+          setResultSubmitted(true);
+        } catch (error) {
+          console.error("Error submitting quiz result:", error);
+        }
+      })();
+    }
+  }, [gameEnded, matchedCards.length, cards.length]);
+
   if (gameEnded) {
     const isComplete = matchedCards.length === cards.length;
     const performance = getPerformanceRating();
