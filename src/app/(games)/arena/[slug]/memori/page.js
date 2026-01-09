@@ -10,21 +10,23 @@ import { useParams } from "next/navigation";
 import { provinceService } from "@/services/modules/province.service";
 import { GameType } from "@/constants/gameType";
 import { gameResultService } from "@/services/modules/game-result.service";
+import GoldEmblem from "@/app/loading/page";
 
 const Memori = () => {
   // Card data - 8 pairs of matching cards
-  const cardPairs = [
-    { id: 1, text: "Jakarta" },
-    { id: 2, text: "Bandung" },
-    { id: 3, text: "Surabaya" },
-    { id: 4, text: "Semarang" },
-    { id: 5, text: "Yogyakarta" },
-    { id: 6, text: "Malang" },
-    { id: 7, text: "Medan" },
-    { id: 8, text: "Bali" },
-  ];
+  // const cardPairs = [
+  //   { id: 1, text: "Jakarta" },
+  //   { id: 2, text: "Bandung" },
+  //   { id: 3, text: "Surabaya" },
+  //   { id: 4, text: "Semarang" },
+  //   { id: 5, text: "Yogyakarta" },
+  //   { id: 6, text: "Malang" },
+  //   { id: 7, text: "Medan" },
+  //   { id: 8, text: "Bali" },
+  // ];
 
   // Create pairs and shuffle
+  const [cardPairs, setCardPairs] = useState([]);
   const [cards, setCards] = useState([]);
   const [flippedCards, setFlippedCards] = useState([]);
   const [matchedCards, setMatchedCards] = useState([]);
@@ -37,17 +39,43 @@ const Memori = () => {
   const { slug } = useParams();
   const [province, setProvince] = useState(null);
   const [resultSubmitted, setResultSubmitted] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Fetch Province
   useEffect(() => {
     if (!slug) return;
 
     const fetchProvince = async () => {
+      setIsLoading(true);
       try {
         const data = await provinceService.getBySlug(slug);
+
+        const cultures = {
+          culinary:          data.culinaries?.[0]?.name || "kuliner",
+          musicalInstrument: data.musicalInstruments?.[0]?.name || "musik",
+          regionalSong:      data.regionalSongs?.[0]?.title || "lagu",
+          tourismSpot:       data.tourismSpots?.[0]?.name || "wisata",
+          traditionalDance:  data.traditionalDances?.[0]?.name || "tari",
+          traditionalHouse:  data.traditionalHouses?.[0]?.name || "rumah",
+          traditionalWeapon: data.traditionalWeapons?.[0]?.name || "senjata",
+          tradition:         data.traditions?.[0]?.name || "tradisi",
+        };
+
+        setCardPairs([
+          { id: 1, text: cultures.culinary },
+          { id: 2, text: cultures.musicalInstrument },
+          { id: 3, text: cultures.regionalSong },
+          { id: 4, text: cultures.tourismSpot },
+          { id: 5, text: cultures.traditionalDance },
+          { id: 6, text: cultures.traditionalHouse },
+          { id: 7, text: cultures.traditionalWeapon },
+          { id: 8, text: cultures.tradition },
+        ]);
         setProvince(data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -66,7 +94,7 @@ const Memori = () => {
     // Shuffle cards
     const shuffled = doubledCards.sort(() => Math.random() - 0.5);
     setCards(shuffled);
-  }, []);
+  }, [cardPairs]);
 
   // Timer countdown
   useEffect(() => {
@@ -176,6 +204,8 @@ const Memori = () => {
       })();
     }
   }, [gameEnded, matchedCards.length, cards.length]);
+  
+  if (isLoading) return <GoldEmblem />;
 
   if (gameEnded) {
     const isComplete = matchedCards.length === cards.length;
