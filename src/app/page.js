@@ -152,7 +152,7 @@ function Page() {
             {/* Button juga bisa kita kasih animasi dikit biar ga kaget munculnya */}
             <div className="headline mt-6 md:mt-8">
               <Link
-                href={"/login"}
+                href={"/atlas"}
                 className="group bg-(--color-primary) cta border flex items-center text-white py-3 px-7 md:py-3.5 md:px-8 gap-3 shadow-2xl border-(--color-secondary)/80 rounded-full font-medium text-sm md:text-base hover:bg-opacity-90 transition-all"
               >
                 <StaggerText title="Mulai Eksplorasi" />
