@@ -17,11 +17,11 @@ export const LIST_FAQ = [
   {
     question: "Apakah saya bisa berkontribusi menambahkan data budaya?",
     answer:
-      "Untuk saat ini, database dikurasi oleh tim internal dan ahli budaya untuk menjaga akurasi. Namun, kami sedang mengembangkan fitur 'Komunitas' di mana kamu nantinya bisa mengusulkan konten baru yang akan divalidasi oleh tim kami.",
+      "Untuk saat ini, database dikurasi oleh tim internal untuk menjaga akurasi. Namun, kami sedang mengembangkan fitur 'Komunitas' di mana kamu nantinya bisa mengusulkan konten baru yang akan divalidasi oleh tim kami.",
   },
   {
     question: "Apakah aplikasi ini tersedia untuk iOS dan Android?",
     answer:
-      "Saat ini NusaBudaya berbasis web (Web App) yang sudah dioptimalkan untuk mobile (PWA). Jadi, kamu bisa membukanya langsung dari browser di HP-mu tanpa perlu download aplikasi yang memakan memori!",
+      "Saat ini NusaBudaya berbasis web (Web App) akan tetapi sudah responsive. Jadi, kamu bisa membukanya langsung dari browser di HP-mu tanpa perlu download aplikasi yang memakan memori!",
   },
 ];
