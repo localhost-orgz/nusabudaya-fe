@@ -101,21 +101,21 @@ const MockupBatik = () => {
   const mockups = [
     {
       id: "tshirt",
-      name: "Modern T-Shirt",
+      name: "Kemeja",
       model: "/models/baju.glb",
       pos: [0, 0, 1.8],
       fov: 40,
     },
     {
       id: "dress",
-      name: "Elegant Dress",
+      name: "Dress",
       model: "/models/dress.glb",
       pos: [0, 0.8, 2.5],
       fov: 45,
     },
     {
       id: "bag",
-      name: "Premium Tote",
+      name: "Tote Bag",
       model: "/models/bag.glb",
       pos: [1.2, 0.5, 1.8],
       fov: 40,

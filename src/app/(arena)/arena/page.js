@@ -3,7 +3,7 @@ import GamesCard from "@/components/Arena/GamesCard";
 import SearchProvince from "@/components/Arena/SearchProvince";
 import HeaderSection from "@/components/HeaderSection";
 import { useGameResultStore } from "@/stores/gameResultStore";
-import { CircleStar, Gamepad2, Zap } from "lucide-react";
+import { CircleStar, Gamepad2, Info, X, Zap } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useArenaStore } from "@/stores/arenaStore"; // 👈 Import store baru
 
@@ -11,6 +11,7 @@ const page = () => {
   // const [province, setProvince] = useState("");
   const { province, setProvince } = useArenaStore();
   const { totalXp, totalBadge } = useGameResultStore();
+  const [isDisclaimerOpen, setIsDisclaimerOpen] = useState(true);
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -101,6 +102,26 @@ const page = () => {
           </span>
         </div>
 
+        {isDisclaimerOpen && (
+          <div className="w-full mb-5 rounded-lg p-3 bg-(--color-secondary)/30 border border-(--color-secondary) gap-3 flex items-start justify-start relative pr-12 transition-all">
+            {/* 👇 PERBAIKAN DISINI: Tambah 'shrink-0' biar icon gak gepeng */}
+            <Info className="stroke-[#c7c7c7] w-5 h-5 mt-0.5 shrink-0" />
+
+            <span className="text-sm text-[#c7c7c7] leading-relaxed">
+              Untuk masuk Leaderboard: Selesaikan 3 game di provinsi ini, dan
+              harus mendapatkan skor 100% pada permainan Kartu Memori & Kuis.
+            </span>
+
+            {/* Tombol close tetap di posisi absolute */}
+            <button
+              onClick={() => setIsDisclaimerOpen(false)}
+              className="absolute top-3 right-3 p-1 rounded hover:bg-white/10"
+            >
+              <X className="w-5 h-5 stroke-[#c7c7c7]" />
+            </button>
+          </div>
+        )}
+
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
           {province ? (
             <>
@@ -110,8 +131,8 @@ const page = () => {
                 gameDescription={
                   "Pasangkan pasangan kartu dengan gambar barang tradisional, simbol tradisional, atau budaya elemen lainnya. Belajar sambil latih ingatan kamu."
                 }
-                gameExp={75}
-                gameDuration={1}
+                gameExp={80}
+                gameDuration={"1+"}
                 province={province}
               />
               <GamesCard
@@ -120,8 +141,8 @@ const page = () => {
                 gameDescription={
                   "Tebak gambar mengenai adat dan budaya tradisional dari provinsi yang kamu pilih. Belajar lewat visual kamu!"
                 }
-                gameExp={75}
-                gameDuration={1}
+                gameExp={224}
+                gameDuration={"5+"}
                 province={province}
               />
               <GamesCard
@@ -130,8 +151,8 @@ const page = () => {
                 gameDescription={
                   "Melatih pengetahuan kamu seputar adat dan budaya melalui pertanyaan-pertanyaan menarik yang bisa melatih dan mengukur kemampuan kamu."
                 }
-                gameExp={75}
-                gameDuration={1}
+                gameExp={80}
+                gameDuration={2}
                 province={province}
               />{" "}
             </>

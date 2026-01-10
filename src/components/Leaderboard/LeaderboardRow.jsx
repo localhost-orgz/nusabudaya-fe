@@ -22,14 +22,15 @@ function LeaderboardRow({ item, activeTab }) {
           </span>
         )}
       </div>
-
       {/* User */}
       <div className="col-span-6 flex items-center gap-3">
         <div className="w-9 h-9 rounded-full bg-gray-800 border border-[#5B5B5B] flex items-center justify-center shrink-0">
           {item.user.picture ? (
             <Image
               src={item.user.picture}
-              alt={item.user.name}
+              alt={
+                `${item.user.firstName} ${item.user.lastName}` || "User Avatar"
+              }
               width={36}
               height={36}
               className="rounded-full"
@@ -42,19 +43,14 @@ function LeaderboardRow({ item, activeTab }) {
           {item.user.firstName + " " + item.user.lastName}
         </span>
       </div>
-
       {/* Score/Date */}
       <div className="col-span-4 text-right">
         <span className="font-bold text-(--color-secondary) text-sm">
-          {new Date(item.createdAt).toLocaleString("id-ID", {
-            day: "2-digit",
-            month: "2-digit",
+          {new Date(item.createdAt).toLocaleDateString("id-ID", {
+            day: "numeric",
+            month: "short",
             year: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-          }).replace(/\./g, ':')}
+          })}
         </span>
       </div>
     </div>

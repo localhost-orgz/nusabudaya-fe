@@ -240,25 +240,22 @@ const MapComponent = () => {
           );
         })}
       </MapContainer>
-
       <Cloud />
       <SearchProvince onProvinceSelect={handleSearchSelect} />
       <AudioController onAudioRefsReady={handleAudioRefsReady} />
       <button
         onClick={() => setIsGuideOpen(!isGuideOpen)}
-        className="absolute bottom-4 left-4 z-1000 bg-[color-mix(in_srgb,var(--color-primary)_90%,transparent)]  backdrop-blur-md border border-(--color-secondary) p-2.5 md:p-3 rounded-full hover:bg-(--color-secondary) active:scale-95 transition-all duration-300 group shadow-lg"
+        className="fixed bottom-7 md:bottom-6 right-4 z-1000 bg-[color-mix(in_srgb,var(--color-primary)_90%,transparent)] backdrop-blur-md border border-(--color-secondary) p-2.5 md:p-3 rounded-full hover:bg-(--color-secondary) active:scale-95 transition-all duration-300 group shadow-lg"
       >
         <CircleQuestionMark className="w-6 h-6 stroke-white" />
       </button>
       {isGuideOpen && <Guide onClose={handleCloseGuide} />}
-
       {selectedProvince && (
         <DetailProvince
           province={selectedProvince}
           onClose={handleClosePanel}
         />
       )}
-
       {/* Mobile Hint - Shows briefly on first load */}
       {/* {isMobile && (
         <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-999 pointer-events-none">
