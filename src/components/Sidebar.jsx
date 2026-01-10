@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { LIST_SIDEBAR } from "@/constants/listSidebar";
 import { usePathname } from "next/navigation";
@@ -29,7 +29,7 @@ const Sidebar = () => {
   };
 
   useEffect(() => {
-    if (user) { // Opsional: hanya fetch jika user sudah login
+    if (user) {
       fetchGameResult();
     }
   }, [user]);
