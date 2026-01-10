@@ -7,6 +7,7 @@ import { ChevronDown, Menu, X, LogOut } from "lucide-react";
 import ProfileModal from "./Profile/ProfileModal";
 import SidebarProfile from "./SidebarProfile";
 import { useUser } from "@/context/userContext";
+import { useGameResultStore } from "@/stores/gameResultStore";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -14,6 +15,7 @@ const Sidebar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const { totalXp } = useGameResultStore();
 
   const isChildActive = (children) =>
     children?.some((child) => pathname.startsWith(child.path));
@@ -76,8 +78,9 @@ const Sidebar = () => {
           {/* Profile Section */}
           {user && (
             <SidebarProfile
-              onProfileModal={setIsProfileModalOpen}
+              // onProfileModal={setIsProfileModalOpen}
               user={user}
+              xp={totalXp}
             />
           )}
 

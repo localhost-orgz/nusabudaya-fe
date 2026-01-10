@@ -2,13 +2,13 @@ import { ChevronRight, Zap } from "lucide-react";
 import Image from "next/image";
 import React from "react";
 
-const SidebarProfile = ({ user, onProfileModal }) => {
+const SidebarProfile = ({ user, xp, onProfileModal }) => {
   if (!user) return null;
   return (
     <div className="rounded-lg mt-6 mb-2">
       <div
         className="flex items-center gap-3 p-2 px-3 cursor-pointer hover:bg-[color-mix(in_srgb,var(--color-secondary)_20%,transparent)] rounded-lg transition-all"
-        onClick={() => onProfileModal(true)}
+        // onClick={() => onProfileModal(true)}
       >
         {/* Avatar */}
         <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-(--color-secondary) shrink-0">
@@ -40,12 +40,11 @@ const SidebarProfile = ({ user, onProfileModal }) => {
           <div className="flex items-center gap-0.5 mt-0.5">
             <Zap className="w-3.5 h-3.5 fill-(--color-secondary) stroke-transparent" />
             <span className="text-(--color-secondary) text-xs tracking-wider">
-              {user.xp} XP
+              {xp} XP
             </span>
           </div>
         </div>
 
-        <ChevronRight className="h-5 w-5 stroke-white" />
       </div>
     </div>
   );
