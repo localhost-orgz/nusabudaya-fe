@@ -39,7 +39,10 @@ function AksaraPage() {
   const aksaraData = LIST_AKSARA.find((a) => a.path === `/aksara/${slug}`);
 
   const handleCheck = () => {
-    console.log("DATA MASTER BARU:", JSON.stringify(points.map(p => [p.x, p.y])));
+    console.log(
+      "DATA MASTER BARU:",
+      JSON.stringify(points.map((p) => [p.x, p.y]))
+    );
 
     if (!aksaraData || !aksaraData.templatePoints) {
       // alert("Template aksara belum tersedia!");
@@ -154,9 +157,9 @@ function AksaraPage() {
           <Info className="stroke-[#c7c7c7] w-5 h-5 mt-0.5 shrink-0" />
 
           <span className="text-sm text-[#c7c7c7] leading-relaxed">
-            Sistem pengenalan aksara menggunakan teknologi unistroke
-            recognition. Tulis aksara dalam satu goresan berkelanjutan tanpa
-            mengangkat pena untuk hasil optimal.
+            Sistem ini menggunakan teknologi unistroke recognition. Jadi,
+            pastikan garis tidak terputus saat menulis. Butuh contoh? Klik
+            tombol Tutorial berwarna emas di atas.
           </span>
 
           {/* Tombol close tetap di posisi absolute */}

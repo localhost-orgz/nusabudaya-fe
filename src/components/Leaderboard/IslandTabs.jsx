@@ -9,7 +9,7 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
     const fetchProvinces = async () => {
       const res = await provinceService.getAll();
       setProvinces(res);
-    }
+    };
 
     fetchProvinces();
   }, []);
@@ -23,7 +23,7 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
             key={province.id}
             onClick={() => onActiveTab(province.slug)}
             className={`
-                  relative group min-w-[140px] h-40 rounded-xl border-2 p-3 flex flex-col items-center justify-center gap-3 transition-all duration-300 snap-center
+                  relative group min-w-[140px] h-40 rounded-xl border-2 p-3 flex flex-col items-center justify-between gap-2 transition-all duration-300 snap-center
                   ${
                     isActive
                       ? "bg-[#1a2c38] border-(--color-secondary) shadow-[0_0_15px_rgba(200,166,104,0.3)]"
@@ -31,9 +31,9 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
                   }
                 `}
           >
-            {/* Image Container */}
+            {/* Image Container with fixed height */}
             <div
-              className={`relative w-20 h-20 transition-transform duration-300 ${
+              className={`relative w-20 h-20 flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${
                 isActive
                   ? "scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
                   : ""
@@ -42,14 +42,14 @@ const IslandTabs = ({ onActiveTab, activeTab }) => {
               <img
                 src={province.icon_url}
                 alt={province.name}
-                className={`object-contain ${
+                className={`max-w-full max-h-full object-contain ${
                   province.slug === "global" ? "p-0" : "p-1"
                 }`}
               />
             </div>
 
             {/* Label */}
-            <div className="text-center z-10">
+            <div className="text-center z-10 flex-shrink-0">
               <span
                 className={`text-sm font-bold block ${
                   isActive ? "text-(--color-secondary)" : "text-gray-300"

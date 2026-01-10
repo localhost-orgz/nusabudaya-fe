@@ -94,15 +94,6 @@ const DetailProvince = ({ province, onClose }) => {
             data={province.traditionalHouses}
           />
 
-          {/* ==== Tari Tradisional ==== */}
-          {/* <Cultures
-            openInfo={setIsInfoOpen}
-            setDetail={setDetail}
-            title="Tari Tradisional"
-            setTitle={setTitle}
-            data={province.traditionalDances}
-          /> */}
-
           {/* ==== Senjata Tradisional ==== */}
           <Cultures
             openInfo={setIsInfoOpen}
@@ -128,24 +119,6 @@ const DetailProvince = ({ province, onClose }) => {
             title="Musik Tradisional"
             setTitle={setTitle}
             data={province.musicalInstruments}
-          />
-
-          {/* ==== Lagu Daerah ==== */}
-          <Cultures
-            openInfo={setIsInfoOpen}
-            setDetail={setDetail}
-            title="Lagu Daerah"
-            setTitle={setTitle}
-            data={province.regionalSongs}
-          />
-
-          {/* ==== Tradisi ==== */}
-          <Cultures
-            openInfo={setIsInfoOpen}
-            setDetail={setDetail}
-            title="Tradisi"
-            setTitle={setTitle}
-            data={province.traditions}
           />
 
           {/* ==== Spot Wisata ==== */}

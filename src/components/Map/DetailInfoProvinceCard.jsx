@@ -49,15 +49,15 @@ export default function DetailInfoProvinceCard({ data, label }) {
 
       {/* B. CONTENT SECTION */}
       <div
-        className={`space-y-4 flex flex-col justify-center ${
+        className={`space-y-4 flex flex-col ${
           hasVisualMedia ? "md:w-1/2" : "w-full"
         }`}
       >
         {/* Header Title */}
         <div
           className={`
-            bg-gradient-to-r from-white/10 to-transparent px-4 py-2 rounded-l-md border-l-4 border-[var(--color-secondary)]
-            ${!hasVisualMedia ? "text-center md:text-left" : ""} 
+            bg-linear-to-r from-(--color-secondary)/30 to-transparent px-4 py-2 border-l-4 border-(--color-secondary)
+            ${!hasVisualMedia ? "text-left" : ""} 
         `}
         >
           <h3 className="text-[#f2ecd5] text-2xl md:text-4xl serif mb-1 font-bold">
@@ -71,15 +71,7 @@ export default function DetailInfoProvinceCard({ data, label }) {
         {/* --- SLOT KHUSUS --- */}
 
         {/* 1. AUDIO PLAYER (Kasus Lagu Daerah) 🎵 */}
-        {data.audio_url && (
-          <div className="w-full bg-white/5 p-3 rounded-lg border border-white/10">
-            <div className="flex items-center gap-2 mb-2 text-white/70 text-sm">
-              <PlayCircle className="w-4 h-4" />
-              <span>Putar Lagu</span>
-            </div>
-            <CustomAudioPlayer audioUrl={data.audio_url} />
-          </div>
-        )}
+        {data.audio_url && <CustomAudioPlayer audioUrl={data.audio_url} />}
 
         {/* 2. DATE & CARA MAIN (Badge Info) */}
         <div
