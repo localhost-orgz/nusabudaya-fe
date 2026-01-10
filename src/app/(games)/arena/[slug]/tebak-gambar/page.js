@@ -12,9 +12,13 @@ import { GameType } from "@/constants/gameType";
 import { useParams } from "next/navigation";
 import { provinceService } from "@/services/modules/province.service";
 import { gameResultService } from "@/services/modules/game-result.service";
+import { imageGuessService } from "@/services/modules/image-guess.service";
+import GoldEmblem from "@/app/loading/page";
 
 const TebakGambar = () => {
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
   const [timeLeft, setTimeLeft] = useState(
@@ -33,20 +37,30 @@ const TebakGambar = () => {
   useEffect(() => {
     if (!slug) return;
 
-    const fetchProvince = async () => {
+    const initData = async () => {
+      setIsLoading(true);
       try {
-        const data = await provinceService.getBySlug(slug);
-        setProvince(data);
+        const provinceRes = await provinceService.getBySlug(slug);
+        if (provinceRes && provinceRes.id) {
+            const questionsRes = await imageGuessService.getByProvince(provinceRes.id);
+            
+            setProvince(provinceRes);
+            setQuestions(questionsRes);
+        } else {
+            console.error("Province not found");
+        }
+
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching data:", err);
+      } finally {
+        setIsLoading(false); // Selesai loading, apapun hasilnya
       }
     };
 
-    fetchProvince();
+    initData();
   }, [slug]);
 
-  // Get questions - for now using Jawa Barat
-  const questions = getGuessImageQuizByProvince("Jawa Barat");
+  // Get questions
   const currentQuestion = questions[currentQuestionIndex];
 
   // Calculate potential XP based on current time
@@ -69,13 +83,13 @@ const TebakGambar = () => {
     }
   }, [timeLeft, isAnswered, quizEnded, totalTime]);
 
-  const handleAnswerSelect = (answerIndex) => {
+  const handleAnswerSelect = (answer) => {
     if (isAnswered) return;
 
-    setSelectedAnswer(answerIndex);
+    setSelectedAnswer(answer);
     setIsAnswered(true);
 
-    const isCorrect = answerIndex === currentQuestion.correctAnswer;
+    const isCorrect = answer === currentQuestion.answer;
     const earnedXP = isCorrect ? potentialXP : 0;
     const currentStage = GUESS_IMAGE_CONFIG.getBlurStage(timeLeft);
 
@@ -84,8 +98,8 @@ const TebakGambar = () => {
       questionId: currentQuestion.id,
       isCorrect,
       isTimeout: false,
-      selectedAnswer: answerIndex,
-      correctAnswer: currentQuestion.correctAnswer,
+      selectedAnswer: answer,
+      correctAnswer: currentQuestion.answer,
       xpEarned: earnedXP,
       stage: currentStage.label,
       timeRemaining: timeLeft,
@@ -162,6 +176,8 @@ const TebakGambar = () => {
       })();
     }
   }, [quizEnded, correctAnswers, questions.length, xpEarned, totalTime, province]);
+
+  if (isLoading || !currentQuestion) return <GoldEmblem />;
 
   if (quizEnded) {
     return (

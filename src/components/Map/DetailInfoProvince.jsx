@@ -47,7 +47,7 @@ const DetailInfoProvince = ({ context, detail, province, openInfo }) => {
                 <div className="w-full sm:w-64 lg:w-72 mx-auto lg:mx-0 shrink-0">
                   <div className="aspect-square bg-white/5 rounded-lg p-4 flex items-center justify-center">
                     <img
-                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/eb/Coat_of_arms_of_Jakarta.svg/375px-Coat_of_arms_of_Jakarta.svg.png"
+                      src={province.icon_url}
                       alt={`${province.name} emblem`}
                       className="w-full h-full object-contain"
                     />
